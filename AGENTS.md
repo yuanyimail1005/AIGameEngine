@@ -11,11 +11,15 @@ This file is the contract for anyone — human or AI agent — changing the code
 | `Ember/src/Ember/` | Core engine static library (`Ember`). Subfolders: `Core`, `Renderer`, `Scene`, `Asset`, `Physics`, `Scripting`, `Audio`, `ImGui`, `Editor` (editor-only services). |
 | `Ember/shaders/` | GLSL shaders `<Name>.<vert|frag|comp>.glsl`, compiled to SPIR-V at build time and **embedded** in the binary. Shared includes in `Ember/shaders/include/`. |
 | `Ember/vendor/` | Single-TU implementations of header-only libs (stb, cgltf, miniaudio). Built without strict warnings. |
-| `EmberEditor/` | Editor executable (ImGui UI, gizmos, AI control server). |
+| `EmberEditor/Core/` | `EmberEditorCore` library: `EditorContext` (editor state), `EditorCommands` (JSON command API), `AIServer`, `GameExporter`. UI-independent; linked by the tests. |
+| `EmberEditor/App/` | Editor executable: ImGui UI (`EditorUI.cpp`), command-line modes (`EditorApp.cpp`). |
 | `EmberRuntime/` | Runtime executable that plays an exported game. |
 | `EmberTests/` | doctest unit + integration tests (`EmberTests` executable). |
 | `cmake/` | Dependency pinning (`EmberDependencies.cmake`), shader embedding, compile options, patches for third-party code. |
-| `Resources/` | Engine resources shipped with the editor (fonts, icons, default HDRI). |
+| `TestProject/` | Feature test project (every component + whole Lua API). Built by `Tools/build_test_project.py`. |
+| `Tools/` | `ember_ai.py` (AI client), `build_test_project.py`, `generate_test_assets.py`, `gen_command_docs.py`. |
+| `docs/` | `ScriptingAPI.md`, `AIControl.md` (command reference generated from `list_commands`). |
+| `.claude/skills/` | Agent skills: `ember-build-game` (making games via the AI interface), `ember-engine-dev` (checklists for engine changes). |
 
 ## Building
 
@@ -43,7 +47,9 @@ cmake --build build -j4
 * `EMBER_TEST_VERBOSE=1` shows engine trace logging during tests.
 * Run a single test: `./build/bin/EmberTests -tc="*name pattern*"`; a suite: `-ts=Renderer`.
 * The feature test scene (`TestProject/`) must exercise every component and the entire scripting API; extend it
-  with every new feature and keep its automated run (`EmberEditor --headless --run-tests`) green.
+  with every new feature (`Tools/build_test_project.py` + `TestProject/Assets/Scripts/FeatureTest.lua`) and keep
+  `EmberEditor --project TestProject --run-tests --frames 400` green. `ctest` runs it together with `EmberTests`.
+* `EMBER_TEST_SAVE_IMAGES=<dir>` dumps every renderer-test frame as PNG - look at them when changing rendering.
 
 ## Code style (Hazel conventions)
 
@@ -70,11 +76,16 @@ cmake --build build -j4
   NVRHI's viewport uses D3D conventions (y-up NDC, depth 0..1); glm is configured with `GLM_FORCE_DEPTH_ZERO_TO_ONE`.
 * Vulkan calls outside NVRHI go through the Vulkan-Hpp dynamic dispatcher's C entry points
   (`VulkanGraphicsDevice.cpp`). Never define the dispatcher storage anywhere else.
-* Anything an editor user can do must also be possible through the AI control interface (see the editor docs).
+* Anything an editor user can do must also be possible through the AI control interface (`docs/AIControl.md`).
+  UI actions that change the scene should call `EditorCommands` so both paths behave identically. After adding or
+  changing commands run `python3 Tools/gen_command_docs.py`.
+* Step-by-step checklists (new component, Lua function, editor command, shader) are in
+  `.claude/skills/ember-engine-dev/SKILL.md`.
 * Headless mode (`--headless`) must keep working: it is used by tests, CI and AI agents.
 
 ## Committing
 
-1. Build with zero warnings, run `EmberTests` on the GPU (and llvmpipe when touching the renderer).
+1. Build with zero warnings, run `ctest` (EmberTests + feature scene) on the GPU, and `EmberTests` on llvmpipe
+   when touching the renderer.
 2. Review your own diff against this file: style, ownership, error handling, tests present.
 3. Commit with a descriptive message (what and why). Push to `main` on GitHub.

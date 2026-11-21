@@ -77,6 +77,13 @@ TEST_SUITE("Core")
 		CHECK(empty->Empty());
 
 		CHECK_FALSE(FileSystem::ReadText(dir / "does_not_exist.txt").has_value());
+
+		CHECK(FileSystem::IsSafeRelativePath("Scripts/Player.lua"));
+		CHECK_FALSE(FileSystem::IsSafeRelativePath("a/b/../../c"));
+		CHECK_FALSE(FileSystem::IsSafeRelativePath(""));
+		CHECK_FALSE(FileSystem::IsSafeRelativePath("../secret"));
+		CHECK_FALSE(FileSystem::IsSafeRelativePath("/etc/passwd"));
+		CHECK_FALSE(FileSystem::IsSafeRelativePath("a\\..\\..\\b"));
 		CHECK(FileSystem::GetExecutableDirectory().is_absolute());
 
 		std::filesystem::remove_all(dir);

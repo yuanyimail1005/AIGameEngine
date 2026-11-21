@@ -97,6 +97,20 @@ namespace Ember {
 		return !ec && std::filesystem::is_directory(path, ec);
 	}
 
+	bool FileSystem::IsSafeRelativePath(const std::filesystem::path& path)
+	{
+		if (path.empty() || path.is_absolute() || path.has_root_name() || path.has_root_directory())
+			return false;
+		for (const std::filesystem::path& part : path)
+		{
+			if (part == "..")
+				return false;
+		}
+		// Reject backslash-separated traversal on POSIX too (paths may come from Windows-authored content).
+		const std::string text = path.generic_string();
+		return text.find("..\\") == std::string::npos && text.find("\\..") == std::string::npos && text.front() != '/' && text.front() != '\\';
+	}
+
 	std::filesystem::path FileSystem::GetExecutableDirectory()
 	{
 #if defined(EMBER_PLATFORM_WINDOWS)

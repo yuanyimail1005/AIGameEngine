@@ -22,6 +22,10 @@ namespace Ember {
 		static bool Exists(const std::filesystem::path& path);
 		static bool CreateDirectories(const std::filesystem::path& path);
 
+		// True if path is relative and contains no '..' components or root/drive parts, i.e. it cannot escape
+		// the directory it is resolved against. Used to validate asset paths coming from scripts or remote clients.
+		static bool IsSafeRelativePath(const std::filesystem::path& path);
+
 		// Directory containing the running executable.
 		static std::filesystem::path GetExecutableDirectory();
 	};

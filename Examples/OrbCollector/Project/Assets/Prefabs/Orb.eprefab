@@ -1,0 +1,50 @@
+Prefab: Orb
+Version: 1
+Entities:
+  - Entity: 4900745117152844307
+    Components:
+      Tag:
+        Tag: Orb
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [0.600000024, 0.600000024, 0.600000024]
+      MeshRenderer:
+        Mesh: builtin://Sphere
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.100000001, 0.400000006, 0.200000003, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0.300000012, 1, 0.5]
+          EmissiveStrength: 2.5
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: false
+        Visible: true
+      RigidBody:
+        Type: Kinematic
+        Mass: 1
+        LinearDamping: 0.0500000007
+        AngularDamping: 0.0500000007
+        GravityScale: 1
+        Friction: 0.5
+        Restitution: 0
+        IsTrigger: true
+        LockRotation: false
+        ContinuousDetection: false
+      SphereCollider:
+        Radius: 0.5
+        Offset: [0, 0, 0]
+      Script:
+        Script: Scripts/Orb.lua

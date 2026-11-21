@@ -88,6 +88,13 @@ with EmberEditor.launch() as editor:
 Agents using Claude Code get step-by-step guidance from the skills in `.claude/skills/` (`ember-build-game`,
 `ember-engine-dev`).
 
+**Example**: [`Examples/OrbCollector/build_game.py`](Examples/OrbCollector/build_game.py) builds a complete small
+game (rolling-ball orb collector with physics, triggers, prefabs, scoring, sounds and a follow camera) purely
+through the AI interface, play-tests it with simulated keyboard input and exports it. Open the result with
+`./build/bin/EmberEditor --project Examples/OrbCollector/Project`.
+
+![Orb Collector](Examples/OrbCollector/screenshot.png)
+
 ## Running a game
 
 ```bash

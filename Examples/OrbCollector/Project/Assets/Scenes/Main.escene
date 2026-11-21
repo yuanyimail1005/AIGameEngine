@@ -1,0 +1,572 @@
+Scene: Main
+Version: 1
+Entities:
+  - Entity: 13869907004791945012
+    Components:
+      Tag:
+        Tag: Main Camera
+      Transform:
+        Translation: [0, 9, 11]
+        Rotation: [-0.69813168, 0, 0]
+        Scale: [1, 1, 1]
+      Camera:
+        ProjectionType: Perspective
+        PerspectiveFOV: 0.785398006
+        PerspectiveNear: 0.100000001
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -100
+        OrthographicFar: 100
+        Primary: true
+        FixedAspectRatio: false
+      Script:
+        Script: Scripts/FollowCamera.lua
+      AudioListener:
+        Active: true
+  - Entity: 862376018822403912
+    Components:
+      Tag:
+        Tag: Sun
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [-0.87266463, 0.52359879, 0]
+        Scale: [1, 1, 1]
+      DirectionalLight:
+        Color: [1, 1, 1]
+        Intensity: 3
+        CastShadows: true
+        ShadowSoftness: 0.800000012
+  - Entity: 13503831043537816167
+    Components:
+      Tag:
+        Tag: Sky
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      SkyLight:
+        EnvironmentMap: ""
+        Intensity: 0.800000012
+        Rotation: 0
+        DrawSkybox: true
+  - Entity: 15541314878960646320
+    Components:
+      Tag:
+        Tag: Platform
+      Transform:
+        Translation: [0, -0.25, 0]
+        Rotation: [0, 0, 0]
+        Scale: [16, 0.5, 16]
+      MeshRenderer:
+        Mesh: builtin://Cube
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.180000007, 0.200000003, 0.25999999, 1]
+          Metallic: 0
+          Roughness: 0.600000024
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+      RigidBody:
+        Type: Static
+        Mass: 1
+        LinearDamping: 0.0500000007
+        AngularDamping: 0.0500000007
+        GravityScale: 1
+        Friction: 0.800000012
+        Restitution: 0
+        IsTrigger: false
+        LockRotation: false
+        ContinuousDetection: false
+      BoxCollider:
+        HalfExtents: [0.5, 0.5, 0.5]
+        Offset: [0, 0, 0]
+  - Entity: 7008835129259684091
+    Components:
+      Tag:
+        Tag: Rail0
+      Transform:
+        Translation: [0, 0.25, -8.25]
+        Rotation: [0, 0, 0]
+        Scale: [16.5, 0.5, 0.5]
+      MeshRenderer:
+        Mesh: builtin://Cube
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.899999976, 0.449999988, 0.150000006, 1]
+          Metallic: 0.5
+          Roughness: 0.349999994
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+      BoxCollider:
+        HalfExtents: [0.5, 0.5, 0.5]
+        Offset: [0, 0, 0]
+  - Entity: 97975567232052810
+    Components:
+      Tag:
+        Tag: Rail1
+      Transform:
+        Translation: [-8.25, 0.25, 0]
+        Rotation: [0, 0, 0]
+        Scale: [0.5, 0.5, 6]
+      MeshRenderer:
+        Mesh: builtin://Cube
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.899999976, 0.449999988, 0.150000006, 1]
+          Metallic: 0.5
+          Roughness: 0.349999994
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+      BoxCollider:
+        HalfExtents: [0.5, 0.5, 0.5]
+        Offset: [0, 0, 0]
+  - Entity: 17658892500364140975
+    Components:
+      Tag:
+        Tag: Rail2
+      Transform:
+        Translation: [8.25, 0.25, 0]
+        Rotation: [0, 0, 0]
+        Scale: [0.5, 0.5, 6]
+      MeshRenderer:
+        Mesh: builtin://Cube
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.899999976, 0.449999988, 0.150000006, 1]
+          Metallic: 0.5
+          Roughness: 0.349999994
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+      BoxCollider:
+        HalfExtents: [0.5, 0.5, 0.5]
+        Offset: [0, 0, 0]
+  - Entity: 11758229727973966683
+    Components:
+      Tag:
+        Tag: Player
+      Transform:
+        Translation: [0, 0.600000024, 6]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      MeshRenderer:
+        Mesh: builtin://Sphere
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.949999988, 0.949999988, 1, 1]
+          Metallic: 0.899999976
+          Roughness: 0.150000006
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+      RigidBody:
+        Type: Dynamic
+        Mass: 1
+        LinearDamping: 0.400000006
+        AngularDamping: 0.400000006
+        GravityScale: 1
+        Friction: 0.899999976
+        Restitution: 0
+        IsTrigger: false
+        LockRotation: false
+        ContinuousDetection: false
+      SphereCollider:
+        Radius: 0.5
+        Offset: [0, 0, 0]
+      Script:
+        Script: Scripts/Player.lua
+  - Entity: 11911285125792582744
+    Children: [4348409851365995936]
+    Components:
+      Tag:
+        Tag: Sweeper
+      Transform:
+        Translation: [0, 0.400000006, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      RigidBody:
+        Type: Kinematic
+        Mass: 1
+        LinearDamping: 0.0500000007
+        AngularDamping: 0.0500000007
+        GravityScale: 1
+        Friction: 0.5
+        Restitution: 0
+        IsTrigger: false
+        LockRotation: false
+        ContinuousDetection: false
+      BoxCollider:
+        HalfExtents: [5.5, 0.200000003, 0.200000003]
+        Offset: [0, 0, 0]
+      Script:
+        Script: Scripts/Sweeper.lua
+  - Entity: 4348409851365995936
+    Parent: 11911285125792582744
+    Components:
+      Tag:
+        Tag: SweeperBar
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [11, 0.400000006, 0.400000006]
+      MeshRenderer:
+        Mesh: builtin://Cube
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.800000012, 0.100000001, 0.150000006, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0.600000024, 0.0500000007, 0.0500000007]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+  - Entity: 11452234040351563369
+    Components:
+      Tag:
+        Tag: CenterLight
+      Transform:
+        Translation: [0, 3, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      PointLight:
+        Color: [1, 0.5, 0.300000012]
+        Intensity: 8
+        Range: 9
+  - Entity: 6381363355275315142
+    Components:
+      Tag:
+        Tag: Marker1
+      Transform:
+        Translation: [-3.0999999, 0.300000012, -9.19999981]
+        Rotation: [0, 0, 0]
+        Scale: [0.5, 0.5, 0.5]
+      MeshRenderer:
+        Mesh: builtin://Sphere
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.100000001, 0.100000001, 0.119999997, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+  - Entity: 6788270660319179767
+    Components:
+      Tag:
+        Tag: Marker2
+      Transform:
+        Translation: [-2.29999995, 0.300000012, -9.19999981]
+        Rotation: [0, 0, 0]
+        Scale: [0.5, 0.5, 0.5]
+      MeshRenderer:
+        Mesh: builtin://Sphere
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.100000001, 0.100000001, 0.119999997, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+  - Entity: 9953924290958307069
+    Components:
+      Tag:
+        Tag: Marker3
+      Transform:
+        Translation: [-1.5, 0.300000012, -9.19999981]
+        Rotation: [0, 0, 0]
+        Scale: [0.5, 0.5, 0.5]
+      MeshRenderer:
+        Mesh: builtin://Sphere
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.100000001, 0.100000001, 0.119999997, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+  - Entity: 1874724202072948696
+    Components:
+      Tag:
+        Tag: Marker4
+      Transform:
+        Translation: [-0.699999988, 0.300000012, -9.19999981]
+        Rotation: [0, 0, 0]
+        Scale: [0.5, 0.5, 0.5]
+      MeshRenderer:
+        Mesh: builtin://Sphere
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.100000001, 0.100000001, 0.119999997, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+  - Entity: 9333044739940225405
+    Components:
+      Tag:
+        Tag: Marker5
+      Transform:
+        Translation: [0.100000001, 0.300000012, -9.19999981]
+        Rotation: [0, 0, 0]
+        Scale: [0.5, 0.5, 0.5]
+      MeshRenderer:
+        Mesh: builtin://Sphere
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.100000001, 0.100000001, 0.119999997, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+  - Entity: 15178281651664651072
+    Components:
+      Tag:
+        Tag: Marker6
+      Transform:
+        Translation: [0.899999976, 0.300000012, -9.19999981]
+        Rotation: [0, 0, 0]
+        Scale: [0.5, 0.5, 0.5]
+      MeshRenderer:
+        Mesh: builtin://Sphere
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.100000001, 0.100000001, 0.119999997, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+  - Entity: 13574765929386907644
+    Components:
+      Tag:
+        Tag: Marker7
+      Transform:
+        Translation: [1.70000005, 0.300000012, -9.19999981]
+        Rotation: [0, 0, 0]
+        Scale: [0.5, 0.5, 0.5]
+      MeshRenderer:
+        Mesh: builtin://Sphere
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.100000001, 0.100000001, 0.119999997, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+  - Entity: 12199641159255585925
+    Components:
+      Tag:
+        Tag: Marker8
+      Transform:
+        Translation: [2.5, 0.300000012, -9.19999981]
+        Rotation: [0, 0, 0]
+        Scale: [0.5, 0.5, 0.5]
+      MeshRenderer:
+        Mesh: builtin://Sphere
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.100000001, 0.100000001, 0.119999997, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+  - Entity: 15088904646950712977
+    Components:
+      Tag:
+        Tag: GameManager
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      Script:
+        Script: Scripts/GameManager.lua

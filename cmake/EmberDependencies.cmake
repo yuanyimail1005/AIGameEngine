@@ -180,6 +180,12 @@ target_link_libraries(ember_imgui PUBLIC glfw)
 target_compile_definitions(ember_imgui PUBLIC IMGUI_DEFINE_MATH_OPERATORS)
 
 # ---------------------------------------------------------------------------------------------------
+# nlohmann/json - AI control protocol (header only)
+ember_fetch_sources(nlohmann_json https://github.com/nlohmann/json.git v3.11.3)
+add_library(ember_json INTERFACE)
+target_include_directories(ember_json SYSTEM INTERFACE "${nlohmann_json_SOURCE_DIR}/single_include")
+
+# ---------------------------------------------------------------------------------------------------
 # doctest - unit testing (header only)
 if(EMBER_BUILD_TESTS)
 	ember_fetch_sources(doctest https://github.com/doctest/doctest.git v2.4.12)

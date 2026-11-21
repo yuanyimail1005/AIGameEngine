@@ -178,7 +178,14 @@ namespace Ember {
 
 		void Present() override
 		{
-			if (IsHeadless() || !m_FrameAcquired)
+			if (IsHeadless())
+			{
+				// No swapchain, but the CPU must still not run ahead of the GPU: per-frame resources (e.g. volatile
+				// constant buffer versions) are only recycled once the GPU has finished with them.
+				LimitFramesInFlight();
+				return;
+			}
+			if (!m_FrameAcquired)
 				return;
 			m_FrameAcquired = false;
 
@@ -202,7 +209,12 @@ namespace Ember {
 			else if (result != VK_SUCCESS)
 				EMBER_CORE_ERROR("vkQueuePresentKHR failed: {}", nvrhi::vulkan::resultToString(result));
 
-			// Limit CPU run-ahead so per-frame resources are never overwritten while the GPU still uses them.
+			LimitFramesInFlight();
+		}
+
+		// Limits CPU run-ahead so per-frame resources are never overwritten while the GPU still uses them.
+		void LimitFramesInFlight()
+		{
 			while (m_FramesInFlight.size() >= m_Specification.MaxFramesInFlight)
 			{
 				nvrhi::EventQueryHandle query = m_FramesInFlight.front();

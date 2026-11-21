@@ -3,9 +3,12 @@
 #include "Ember/Core/Assert.h"
 #include "Ember/Core/Input.h"
 #include "Ember/Core/Log.h"
+#include "Ember/ImGui/ImGuiLayer.h"
 #include "Ember/Renderer/GraphicsDevice.h"
 
+#include <chrono>
 #include <system_error>
+#include <thread>
 
 namespace Ember {
 
@@ -53,12 +56,19 @@ namespace Ember {
 		}
 
 		m_Initialized = true;
+
+		if (m_Specification.EnableImGui && !m_Specification.Headless)
+		{
+			m_ImGuiLayer = new ImGuiLayer();
+			PushOverlay(m_ImGuiLayer);
+		}
 	}
 
 	Application::~Application()
 	{
 		// Layers own GPU resources: destroy them before the device.
 		m_LayerStack.Clear();
+		m_ImGuiLayer = nullptr;
 		if (m_GraphicsDevice)
 			m_GraphicsDevice->GetDevice()->waitForIdle();
 		m_GraphicsDevice.reset();
@@ -144,8 +154,13 @@ namespace Ember {
 				{
 					for (Layer* layer : m_LayerStack)
 						layer->OnRender();
-					for (Layer* layer : m_LayerStack)
-						layer->OnImGuiRender();
+					if (m_ImGuiLayer)
+					{
+						m_ImGuiLayer->Begin();
+						for (Layer* layer : m_LayerStack)
+							layer->OnImGuiRender();
+						m_ImGuiLayer->End();
+					}
 					m_GraphicsDevice->Present();
 				}
 			}
@@ -162,6 +177,14 @@ namespace Ember {
 			m_FrameCount++;
 			if (m_Specification.MaxFrames > 0 && m_FrameCount >= m_Specification.MaxFrames)
 				m_Running = false;
+
+			if (m_Specification.Headless && m_Specification.HeadlessMaxFPS > 0.0f)
+			{
+				const float frameBudget = 1.0f / m_Specification.HeadlessMaxFPS;
+				const float spent = frameTimer.Elapsed();
+				if (spent < frameBudget)
+					std::this_thread::sleep_for(std::chrono::duration<float>(frameBudget - spent));
+			}
 		}
 
 		m_GraphicsDevice->GetDevice()->waitForIdle();

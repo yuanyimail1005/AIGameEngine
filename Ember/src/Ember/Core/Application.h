@@ -15,6 +15,7 @@
 namespace Ember {
 
 	class GraphicsDevice;
+	class ImGuiLayer;
 
 	struct ApplicationCommandLineArgs
 	{
@@ -35,6 +36,10 @@ namespace Ember {
 		uint64_t MaxFrames = 0;
 		// Fixed timestep used in headless mode (deterministic), in seconds.
 		float HeadlessTimestep = 1.0f / 60.0f;
+		// Headless mode frame-rate cap (0 = uncapped). Keeps an idle headless editor from spinning a CPU core.
+		float HeadlessMaxFPS = 0.0f;
+		// Create the Dear ImGui layer (windowed mode only).
+		bool EnableImGui = false;
 		std::string PreferredGPU;
 		std::filesystem::path WorkingDirectory;
 		ApplicationCommandLineArgs CommandLineArgs;
@@ -69,11 +74,13 @@ namespace Ember {
 		uint64_t GetFrameCount() const { return m_FrameCount; }
 		float GetLastFrameTime() const { return m_LastFrameDuration; }
 		bool IsHeadless() const { return m_Specification.Headless; }
+		// Null when ImGui is disabled or running headless.
+		ImGuiLayer* GetImGuiLayer() const { return m_ImGuiLayer; }
 
 		static Application& Get() { return *s_Instance; }
 		static bool HasInstance() { return s_Instance != nullptr; }
 
-	protected:
+		// Exit code returned by Run() (e.g. automated runs report failures through it).
 		void SetExitCode(int code) { m_ExitCode = code; }
 
 	private:
@@ -86,6 +93,7 @@ namespace Ember {
 		Scope<Window> m_Window;
 		Scope<GraphicsDevice> m_GraphicsDevice;
 		LayerStack m_LayerStack;
+		ImGuiLayer* m_ImGuiLayer = nullptr;
 
 		bool m_Initialized = false;
 		bool m_Running = true;

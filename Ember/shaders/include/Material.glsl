@@ -7,7 +7,7 @@ layout(set = 1, binding = 0, std140) uniform MaterialConstants
 	vec4 m_BaseColor;
 	vec4 m_Emissive;       // rgb: emissive color * strength
 	vec4 m_Params;         // x: metallic, y: roughness, z: normal scale, w: occlusion strength
-	vec4 m_AlphaParams;    // x: alpha mode (0 opaque, 1 mask, 2 blend), y: cutoff
+	vec4 m_AlphaParams;    // x: alpha mode (0 opaque, 1 mask, 2 blend), y: cutoff, zw: UV tiling
 	uvec4 m_TextureFlags;  // x: base color, y: metallic-roughness, z: normal, w: occlusion (1 = present)
 	uvec4 m_TextureFlags2; // x: emissive
 };
@@ -18,6 +18,12 @@ layout(set = 1, binding = 3) uniform texture2D t_Normal;
 layout(set = 1, binding = 4) uniform texture2D t_Occlusion;
 layout(set = 1, binding = 5) uniform texture2D t_Emissive;
 layout(set = 1, binding = 6) uniform sampler s_Material;
+
+// Applies the material's UV tiling to mesh texture coordinates.
+vec2 MaterialUV(vec2 uv)
+{
+	return uv * m_AlphaParams.zw;
+}
 
 vec4 SampleBaseColor(vec2 uv)
 {

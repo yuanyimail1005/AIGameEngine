@@ -15,3 +15,11 @@ ember_set_compile_options(EmberEditor)
 target_link_libraries(EmberEditor PRIVATE EmberEditorCore)
 # The editor exports games by copying the runtime binary that sits next to it.
 add_dependencies(EmberEditor EmberRuntime)
+
+if(EMBER_BUILD_TESTS)
+	# Plays the feature test scene headless: every component and the whole scripting API must work, with zero
+	# script or GPU validation errors.
+	add_test(NAME FeatureTestScene
+		COMMAND EmberEditor --project "${CMAKE_SOURCE_DIR}/TestProject" --run-tests --frames 400)
+	set_tests_properties(FeatureTestScene PROPERTIES TIMEOUT 600)
+endif()

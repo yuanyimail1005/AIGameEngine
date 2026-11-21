@@ -224,6 +224,7 @@ namespace Ember {
 		std::unordered_set<std::string> WarnedKeys;
 		std::vector<std::string> Errors;
 		std::vector<ScriptTestResult> TestResults;
+		std::vector<std::string> ExpectedTests;
 		std::mt19937 Random{ 1337u };
 		bool Running = false;
 
@@ -838,6 +839,11 @@ namespace Ember {
 			return condition;
 		};
 		test["Pass"] = [this](const std::string& name) { TestResults.push_back({ name, true, {} }); };
+		test["Expect"] = [this](const std::string& name)
+		{
+			if (std::find(ExpectedTests.begin(), ExpectedTests.end(), name) == ExpectedTests.end())
+				ExpectedTests.push_back(name);
+		};
 		test["Fail"] = [this](const std::string& name, sol::optional<std::string> message)
 		{
 			TestResults.push_back({ name, false, message.value_or("failed") });
@@ -1042,6 +1048,19 @@ namespace Ember {
 	const std::vector<ScriptTestResult>& ScriptEngine::GetTestResults() const
 	{
 		return m_Impl->TestResults;
+	}
+
+	std::vector<std::string> ScriptEngine::GetMissingExpectedTests() const
+	{
+		std::vector<std::string> missing;
+		for (const std::string& name : m_Impl->ExpectedTests)
+		{
+			const bool passed = std::any_of(m_Impl->TestResults.begin(), m_Impl->TestResults.end(),
+				[&](const ScriptTestResult& result) { return result.Name == name && result.Passed; });
+			if (!passed)
+				missing.push_back(name);
+		}
+		return missing;
 	}
 
 	bool ScriptEngine::HasInstance(Entity entity) const

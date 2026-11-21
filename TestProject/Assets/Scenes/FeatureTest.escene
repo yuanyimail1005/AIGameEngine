@@ -1,0 +1,499 @@
+Scene: FeatureTest
+Version: 1
+Entities:
+  - Entity: 5015273301646641283
+    Components:
+      Tag:
+        Tag: Main Camera
+      Transform:
+        Translation: [0, 7, 15]
+        Rotation: [-0.383972436, 0, 0]
+        Scale: [1, 1, 1]
+      Camera:
+        ProjectionType: Perspective
+        PerspectiveFOV: 0.87266463
+        PerspectiveNear: 0.100000001
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -100
+        OrthographicFar: 100
+        Primary: true
+        FixedAspectRatio: false
+      AudioListener:
+        Active: true
+  - Entity: 9123105511969020109
+    Components:
+      Tag:
+        Tag: Sun
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [-0.87266463, 0.610865235, 0]
+        Scale: [1, 1, 1]
+      DirectionalLight:
+        Color: [1, 0.949999988, 0.850000024]
+        Intensity: 3.5
+        CastShadows: true
+        ShadowSoftness: 1
+  - Entity: 8165669854933670340
+    Components:
+      Tag:
+        Tag: Sky
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      SkyLight:
+        EnvironmentMap: HDRI/sky.hdr
+        Intensity: 1
+        Rotation: 0
+        DrawSkybox: true
+  - Entity: 13585257038342836645
+    Components:
+      Tag:
+        Tag: Ground
+      Transform:
+        Translation: [0, -0.5, 0]
+        Rotation: [0, 0, 0]
+        Scale: [30, 1, 30]
+      MeshRenderer:
+        Mesh: builtin://Cube
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [1, 1, 1, 1]
+          Metallic: 0
+          Roughness: 0.850000024
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [8, 8]
+          BaseColorTexture: Textures/checker.png
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+      BoxCollider:
+        HalfExtents: [0.5, 0.5, 0.5]
+        Offset: [0, 0, 0]
+  - Entity: 5520048953695706233
+    Components:
+      Tag:
+        Tag: Ball
+      Transform:
+        Translation: [-3, 5, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      MeshRenderer:
+        Mesh: builtin://Sphere
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.850000024, 0.150000006, 0.100000001, 1]
+          Metallic: 0.100000001
+          Roughness: 0.349999994
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+      RigidBody:
+        Type: Dynamic
+        Mass: 1
+        LinearDamping: 0.0500000007
+        AngularDamping: 0.0500000007
+        GravityScale: 1
+        Friction: 0.5
+        Restitution: 0.5
+        IsTrigger: false
+        LockRotation: false
+        ContinuousDetection: false
+      SphereCollider:
+        Radius: 0.5
+        Offset: [0, 0, 0]
+      Script:
+        Script: Scripts/Ball.lua
+  - Entity: 5450824798885785658
+    Components:
+      Tag:
+        Tag: Faller
+      Transform:
+        Translation: [3, 8, 0]
+        Rotation: [0, 0, 0]
+        Scale: [0.800000012, 0.800000012, 0.800000012]
+      MeshRenderer:
+        Mesh: builtin://Cube
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.200000003, 0.699999988, 0.300000012, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+      RigidBody:
+        Type: Dynamic
+        Mass: 1
+        LinearDamping: 0.0500000007
+        AngularDamping: 0.0500000007
+        GravityScale: 1
+        Friction: 0.5
+        Restitution: 0
+        IsTrigger: false
+        LockRotation: false
+        ContinuousDetection: false
+      BoxCollider:
+        HalfExtents: [0.5, 0.5, 0.5]
+        Offset: [0, 0, 0]
+  - Entity: 1020962543444631777
+    Components:
+      Tag:
+        Tag: Pusher
+      Transform:
+        Translation: [9, 2, -2]
+        Rotation: [0, 0, 0]
+        Scale: [0.5, 0.5, 0.5]
+      MeshRenderer:
+        Mesh: builtin://Cube
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.899999976, 0.899999976, 0.200000003, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+      RigidBody:
+        Type: Dynamic
+        Mass: 1
+        LinearDamping: 0
+        AngularDamping: 0
+        GravityScale: 0
+        Friction: 0.5
+        Restitution: 0
+        IsTrigger: false
+        LockRotation: false
+        ContinuousDetection: false
+      BoxCollider:
+        HalfExtents: [0.5, 0.5, 0.5]
+        Offset: [0, 0, 0]
+  - Entity: 167549006563455559
+    Components:
+      Tag:
+        Tag: TriggerZone
+      Transform:
+        Translation: [3, 4, 0]
+        Rotation: [0, 0, 0]
+        Scale: [3, 1, 3]
+      MeshRenderer:
+        Mesh: builtin://Cube
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.200000003, 0.5, 1, 0.349999994]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Blend
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: false
+        Visible: true
+      RigidBody:
+        Type: Static
+        Mass: 1
+        LinearDamping: 0.0500000007
+        AngularDamping: 0.0500000007
+        GravityScale: 1
+        Friction: 0.5
+        Restitution: 0
+        IsTrigger: true
+        LockRotation: false
+        ContinuousDetection: false
+      BoxCollider:
+        HalfExtents: [0.5, 0.5, 0.5]
+        Offset: [0, 0, 0]
+      Script:
+        Script: Scripts/TriggerZone.lua
+  - Entity: 17584541270961980050
+    Components:
+      Tag:
+        Tag: Crate
+      Transform:
+        Translation: [0, 0.5, -3]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      MeshRenderer:
+        Mesh: Models/Crate.gltf
+        Material: ""
+        OverrideMaterial: false
+        MaterialOverride:
+          BaseColor: [1, 1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+      BoxCollider:
+        HalfExtents: [0.5, 0.5, 0.5]
+        Offset: [0, 0, 0]
+  - Entity: 10852065500884407963
+    Components:
+      Tag:
+        Tag: GoldStatue
+      Transform:
+        Translation: [-5, 1, -4]
+        Rotation: [0, 0, 0]
+        Scale: [1.5, 1.5, 1.5]
+      MeshRenderer:
+        Mesh: builtin://Sphere
+        Material: Materials/Gold.ematerial
+        OverrideMaterial: false
+        MaterialOverride:
+          BaseColor: [1, 1, 1, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+  - Entity: 10591440078910639489
+    Components:
+      Tag:
+        Tag: Mover
+      Transform:
+        Translation: [-6, 1, 3]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      MeshRenderer:
+        Mesh: builtin://Capsule
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.600000024, 0.300000012, 0.800000012, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+      RigidBody:
+        Type: Kinematic
+        Mass: 1
+        LinearDamping: 0.0500000007
+        AngularDamping: 0.0500000007
+        GravityScale: 1
+        Friction: 0.5
+        Restitution: 0
+        IsTrigger: false
+        LockRotation: false
+        ContinuousDetection: false
+      CapsuleCollider:
+        Radius: 0.5
+        HalfHeight: 0.5
+        Offset: [0, 0, 0]
+      Script:
+        Script: Scripts/Mover.lua
+  - Entity: 205633483423649589
+    Components:
+      Tag:
+        Tag: Spinner
+      Transform:
+        Translation: [5, 1, 3]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      MeshRenderer:
+        Mesh: builtin://Cylinder
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0.899999976, 0.5, 0.100000001, 1]
+          Metallic: 0.600000024
+          Roughness: 0.5
+          EmissiveColor: [0, 0, 0]
+          EmissiveStrength: 1
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: true
+        Visible: true
+      Script:
+        Script: Scripts/Spinner.lua
+  - Entity: 15037137746918766641
+    Children: [5913015985524830981]
+    Components:
+      Tag:
+        Tag: Lamp
+      Transform:
+        Translation: [-5, 2.5, -1]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      PointLight:
+        Color: [1, 0.600000024, 0.25]
+        Intensity: 6
+        Range: 8
+  - Entity: 5913015985524830981
+    Parent: 15037137746918766641
+    Components:
+      Tag:
+        Tag: LampBulb
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [0.25, 0.25, 0.25]
+      MeshRenderer:
+        Mesh: builtin://Sphere
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0, 0, 0, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [1, 0.600000024, 0.25]
+          EmissiveStrength: 4
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: false
+        Visible: true
+  - Entity: 3265690821088946976
+    Components:
+      Tag:
+        Tag: Spotlight
+      Transform:
+        Translation: [5, 5, -4]
+        Rotation: [-1.57079637, 0, 0]
+        Scale: [1, 1, 1]
+      SpotLight:
+        Color: [0.400000006, 0.600000024, 1]
+        Intensity: 25
+        Range: 10
+        InnerConeAngle: 0.300000012
+        OuterConeAngle: 0.5
+  - Entity: 2480881362295987778
+    Components:
+      Tag:
+        Tag: Speaker
+      Transform:
+        Translation: [0, 1, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      AudioSource:
+        Clip: Audio/hum.wav
+        Volume: 0.300000012
+        Pitch: 1
+        Loop: true
+        PlayOnStart: true
+        Spatial: true
+        MinDistance: 1
+        MaxDistance: 50
+  - Entity: 12078575787773461799
+    Components:
+      Tag:
+        Tag: TestController
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      Script:
+        Script: Scripts/FeatureTest.lua

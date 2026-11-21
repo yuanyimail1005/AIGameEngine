@@ -1,0 +1,36 @@
+Prefab: Projectile
+Version: 1
+Entities:
+  - Entity: 2876077020185290120
+    Components:
+      Tag:
+        Tag: Projectile
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [0.300000012, 0.300000012, 0.300000012]
+      MeshRenderer:
+        Mesh: builtin://Sphere
+        Material: ""
+        OverrideMaterial: true
+        MaterialOverride:
+          BaseColor: [0, 0, 0, 1]
+          Metallic: 0
+          Roughness: 0.5
+          EmissiveColor: [0.300000012, 1, 0.400000006]
+          EmissiveStrength: 3
+          NormalScale: 1
+          OcclusionStrength: 1
+          AlphaMode: Opaque
+          AlphaCutoff: 0.5
+          DoubleSided: false
+          UVTiling: [1, 1]
+          BaseColorTexture: ""
+          MetallicRoughnessTexture: ""
+          NormalTexture: ""
+          OcclusionTexture: ""
+          EmissiveTexture: ""
+        CastShadows: false
+        Visible: true
+      Script:
+        Script: Scripts/Projectile.lua

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
@@ -26,6 +27,7 @@ namespace Ember {
 		AlphaMode Alpha = AlphaMode::Opaque;
 		float AlphaCutoff = 0.5f;
 		bool DoubleSided = false;
+		glm::vec2 UVTiling{ 1.0f }; // texture coordinate scale (repeat textures across large surfaces)
 
 		std::string BaseColorTexture;
 		std::string MetallicRoughnessTexture; // glTF packing: G = roughness, B = metallic

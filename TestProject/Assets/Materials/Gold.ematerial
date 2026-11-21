@@ -1,0 +1,17 @@
+Material:
+  BaseColor: [1, 0.779999971, 0.340000004, 1]
+  Metallic: 1
+  Roughness: 0.25
+  EmissiveColor: [0, 0, 0]
+  EmissiveStrength: 1
+  NormalScale: 1
+  OcclusionStrength: 1
+  AlphaMode: Opaque
+  AlphaCutoff: 0.5
+  DoubleSided: false
+  UVTiling: [1, 1]
+  BaseColorTexture: ""
+  MetallicRoughnessTexture: ""
+  NormalTexture: ""
+  OcclusionTexture: ""
+  EmissiveTexture: ""

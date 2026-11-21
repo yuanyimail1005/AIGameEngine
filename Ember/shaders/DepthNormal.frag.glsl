@@ -13,7 +13,7 @@ layout(location = 1) out uint o_EntityID;
 
 void main()
 {
-	ApplyAlphaMask(v_TexCoord);
+	ApplyAlphaMask(MaterialUV(v_TexCoord));
 	vec3 n = normalize(v_Normal);
 	if (!gl_FrontFacing)
 		n = -n;

@@ -34,6 +34,10 @@ include(EmberCompileOptions)
 include(EmberDependencies)
 include(EmberShaders)
 
+if(EMBER_BUILD_TESTS)
+	enable_testing()
+endif()
+
 add_subdirectory(Ember)
 
 if(EMBER_BUILD_EDITOR)
@@ -43,6 +47,5 @@ endif()
 add_subdirectory(EmberRuntime)
 
 if(EMBER_BUILD_TESTS)
-	enable_testing()
 	add_subdirectory(EmberTests)
 endif()

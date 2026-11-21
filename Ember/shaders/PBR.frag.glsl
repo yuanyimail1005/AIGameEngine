@@ -166,7 +166,7 @@ float SampleShadow(vec3 worldPosition, vec3 normal, vec3 lightDirection)
 
 // ---------------------------------------------------------------------------------------------------
 
-vec3 GetNormal()
+vec3 GetNormal(vec2 uv)
 {
 	vec3 N = normalize(v_Normal);
 	if (!gl_FrontFacing)
@@ -174,7 +174,7 @@ vec3 GetNormal()
 	if (m_TextureFlags.z == 0u)
 		return N;
 
-	vec3 tangentNormal = texture(sampler2D(t_Normal, s_Material), v_TexCoord).xyz * 2.0 - 1.0;
+	vec3 tangentNormal = texture(sampler2D(t_Normal, s_Material), uv).xyz * 2.0 - 1.0;
 	tangentNormal.xy *= m_Params.z;
 
 	vec3 T;
@@ -189,8 +189,8 @@ vec3 GetNormal()
 		// No tangents: derive a basis from screen-space derivatives.
 		vec3 dp1 = dFdx(v_WorldPosition);
 		vec3 dp2 = dFdy(v_WorldPosition);
-		vec2 duv1 = dFdx(v_TexCoord);
-		vec2 duv2 = dFdy(v_TexCoord);
+		vec2 duv1 = dFdx(uv);
+		vec2 duv2 = dFdy(uv);
 		vec3 dp2perp = cross(dp2, N);
 		vec3 dp1perp = cross(N, dp1);
 		T = dp2perp * duv1.x + dp1perp * duv2.x;
@@ -204,14 +204,15 @@ vec3 GetNormal()
 
 void main()
 {
-	vec4 baseColor = ApplyAlphaMask(v_TexCoord);
+	vec2 uv = MaterialUV(v_TexCoord);
+	vec4 baseColor = ApplyAlphaMask(uv);
 	vec3 albedo = baseColor.rgb;
 
 	float metallic = m_Params.x;
 	float roughness = m_Params.y;
 	if (m_TextureFlags.y != 0u)
 	{
-		vec4 mr = texture(sampler2D(t_MetallicRoughness, s_Material), v_TexCoord);
+		vec4 mr = texture(sampler2D(t_MetallicRoughness, s_Material), uv);
 		roughness *= mr.g;
 		metallic *= mr.b;
 	}
@@ -220,7 +221,7 @@ void main()
 
 	float occlusion = 1.0;
 	if (m_TextureFlags.w != 0u)
-		occlusion = mix(1.0, texture(sampler2D(t_Occlusion, s_Material), v_TexCoord).r, m_Params.w);
+		occlusion = mix(1.0, texture(sampler2D(t_Occlusion, s_Material), uv).r, m_Params.w);
 	if (u_FrameParams.w > 0.5 && m_AlphaParams.x != 2.0)
 	{
 		vec2 screenUV = gl_FragCoord.xy * u_ViewportSize.zw;
@@ -230,9 +231,9 @@ void main()
 
 	vec3 emissive = m_Emissive.rgb;
 	if (m_TextureFlags2.x != 0u)
-		emissive *= texture(sampler2D(t_Emissive, s_Material), v_TexCoord).rgb;
+		emissive *= texture(sampler2D(t_Emissive, s_Material), uv).rgb;
 
-	vec3 N = GetNormal();
+	vec3 N = GetNormal(uv);
 	// Orthographic cameras have a constant view direction: the camera's +Z axis (it looks down -Z).
 	vec3 V = u_RenderParams.z > 0.5 ? normalize(u_InverseView[2].xyz) : normalize(u_CameraPosition.xyz - v_WorldPosition);
 	vec3 F0 = mix(vec3(0.04), albedo, metallic);

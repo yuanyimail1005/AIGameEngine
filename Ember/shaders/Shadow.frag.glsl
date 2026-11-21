@@ -7,5 +7,5 @@ layout(location = 0) in vec2 v_TexCoord;
 
 void main()
 {
-	ApplyAlphaMask(v_TexCoord);
+	ApplyAlphaMask(MaterialUV(v_TexCoord));
 }

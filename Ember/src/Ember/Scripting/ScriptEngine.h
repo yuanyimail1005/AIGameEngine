@@ -53,6 +53,9 @@ namespace Ember {
 		const std::vector<std::string>& GetErrors() const;
 		// Results recorded by scripts through the Test API (Test.Check / Test.Pass / Test.Fail).
 		const std::vector<ScriptTestResult>& GetTestResults() const;
+		// Names declared with Test.Expect(name) that have no passing result yet. Automated runs fail if any remain,
+		// so a test scene cannot pass by silently stopping early.
+		std::vector<std::string> GetMissingExpectedTests() const;
 		bool HasInstance(Entity entity) const;
 
 	private:

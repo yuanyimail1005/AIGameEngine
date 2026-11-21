@@ -77,6 +77,8 @@ namespace Ember {
 		HashCombine(seed, static_cast<int>(m.Alpha));
 		HashCombine(seed, m.AlphaCutoff);
 		HashCombine(seed, m.DoubleSided);
+		HashCombine(seed, m.UVTiling.x);
+		HashCombine(seed, m.UVTiling.y);
 		HashCombine(seed, m.BaseColorTexture);
 		HashCombine(seed, m.MetallicRoughnessTexture);
 		HashCombine(seed, m.NormalTexture);
@@ -652,7 +654,7 @@ namespace Ember {
 		constants.BaseColor = parameters.BaseColor;
 		constants.Emissive = glm::vec4(parameters.EmissiveColor * parameters.EmissiveStrength, 0.0f);
 		constants.Params = glm::vec4(parameters.Metallic, parameters.Roughness, parameters.NormalScale, parameters.OcclusionStrength);
-		constants.AlphaParams = glm::vec4(static_cast<float>(parameters.Alpha), parameters.AlphaCutoff, 0.0f, 0.0f);
+		constants.AlphaParams = glm::vec4(static_cast<float>(parameters.Alpha), parameters.AlphaCutoff, parameters.UVTiling.x, parameters.UVTiling.y);
 		constants.TextureFlags = glm::uvec4(baseColor ? 1u : 0u, metallicRoughness ? 1u : 0u, normal ? 1u : 0u, occlusion ? 1u : 0u);
 		constants.TextureFlags2 = glm::uvec4(emissive ? 1u : 0u, 0u, 0u, 0u);
 

@@ -167,6 +167,12 @@ namespace Ember {
 		}
 		for (const std::string& error : scripts->GetErrors())
 			std::printf("SCRIPT ERROR  %s\n", error.c_str());
+		const std::vector<std::string> missing = scripts->GetMissingExpectedTests();
+		// Read everything needed from the runtime scene before Stop() destroys it.
+		const uint32_t scriptErrors = scripts->GetErrorCount();
+		scripts = nullptr;
+		for (const std::string& name : missing)
+			std::printf("MISSING  %s (declared with Test.Expect but never passed)\n", name.c_str());
 
 		if (!m_Options.ScreenshotPath.empty())
 		{
@@ -177,9 +183,9 @@ namespace Ember {
 		m_Context->Stop();
 
 		const uint32_t gpuErrors = device.GetErrorCount();
-		const bool success = failed == 0 && passed > 0 && scripts->GetErrorCount() == 0 && gpuErrors == 0;
+		const bool success = failed == 0 && passed > 0 && missing.empty() && scriptErrors == 0 && gpuErrors == 0;
 		std::printf("Ember test run: %d passed, %d failed, %u script errors, %u GPU errors -> %s\n", passed, failed,
-			scripts->GetErrorCount(), gpuErrors, success ? "SUCCESS" : "FAILURE");
+			scriptErrors, gpuErrors, success ? "SUCCESS" : "FAILURE");
 		std::fflush(stdout);
 		m_ExitCode = success ? 0 : 1;
 	}

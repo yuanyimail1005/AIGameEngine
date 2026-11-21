@@ -65,6 +65,7 @@ namespace Ember::MaterialSerializer {
 		n["AlphaMode"] = AlphaModeToString(m.Alpha);
 		n["AlphaCutoff"] = m.AlphaCutoff;
 		n["DoubleSided"] = m.DoubleSided;
+		n["UVTiling"] = m.UVTiling;
 		n["BaseColorTexture"] = m.BaseColorTexture;
 		n["MetallicRoughnessTexture"] = m.MetallicRoughnessTexture;
 		n["NormalTexture"] = m.NormalTexture;
@@ -99,6 +100,7 @@ namespace Ember::MaterialSerializer {
 		ok &= ReadAlphaMode(n, m.Alpha);
 		ok &= Read(n, "AlphaCutoff", m.AlphaCutoff);
 		ok &= Read(n, "DoubleSided", m.DoubleSided);
+		ok &= Read(n, "UVTiling", m.UVTiling);
 		ok &= Read(n, "BaseColorTexture", m.BaseColorTexture);
 		ok &= Read(n, "MetallicRoughnessTexture", m.MetallicRoughnessTexture);
 		ok &= Read(n, "NormalTexture", m.NormalTexture);

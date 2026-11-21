@@ -1,0 +1,9 @@
+Project:
+  Name: FeatureTest
+  AssetDirectory: Assets
+  StartScene: Scenes/FeatureTest.escene
+  WindowWidth: 1280
+  WindowHeight: 720
+  Fullscreen: false
+  VSync: true
+  RenderQuality: Auto

@@ -1,6 +1,7 @@
 #include "Ember/Scene/ComponentRegistry.h"
 
 #include "Ember/Core/YAMLUtils.h"
+#include "Ember/Renderer/MaterialSerializer.h"
 
 #include <algorithm>
 #include <cctype>
@@ -31,8 +32,6 @@ namespace Ember {
 			{ RigidBodyType::Static, "Static" }, { RigidBodyType::Dynamic, "Dynamic" }, { RigidBodyType::Kinematic, "Kinematic" } };
 		constexpr EnumName<SceneCamera::ProjectionType> s_ProjectionTypes[] = {
 			{ SceneCamera::ProjectionType::Perspective, "Perspective" }, { SceneCamera::ProjectionType::Orthographic, "Orthographic" } };
-		constexpr EnumName<AlphaMode> s_AlphaModes[] = {
-			{ AlphaMode::Opaque, "Opaque" }, { AlphaMode::Mask, "Mask" }, { AlphaMode::Blend, "Blend" } };
 
 		template<typename E, size_t N>
 		const char* EnumToString(const EnumName<E> (&table)[N], E value)
@@ -194,67 +193,13 @@ namespace Ember {
 			return ok;
 		}
 
-		YAML::Node ToNode(const MaterialParameters& m)
-		{
-			YAML::Node n;
-			n["BaseColor"] = m.BaseColor;
-			n["Metallic"] = m.Metallic;
-			n["Roughness"] = m.Roughness;
-			n["EmissiveColor"] = m.EmissiveColor;
-			n["EmissiveStrength"] = m.EmissiveStrength;
-			n["NormalScale"] = m.NormalScale;
-			n["OcclusionStrength"] = m.OcclusionStrength;
-			n["AlphaMode"] = EnumToString(s_AlphaModes, m.Alpha);
-			n["AlphaCutoff"] = m.AlphaCutoff;
-			n["DoubleSided"] = m.DoubleSided;
-			n["BaseColorTexture"] = m.BaseColorTexture;
-			n["MetallicRoughnessTexture"] = m.MetallicRoughnessTexture;
-			n["NormalTexture"] = m.NormalTexture;
-			n["OcclusionTexture"] = m.OcclusionTexture;
-			n["EmissiveTexture"] = m.EmissiveTexture;
-			return n;
-		}
-
-		bool FromNode(const YAML::Node& n, MaterialParameters& m)
-		{
-			bool ok = true;
-			// Accept RGB for convenience (alpha stays as is).
-			if (const YAML::Node color = n["BaseColor"]; color && color.IsSequence() && color.size() == 3)
-			{
-				glm::vec3 rgb;
-				if (ReadYAML(n, "BaseColor", rgb))
-					m.BaseColor = glm::vec4(rgb, m.BaseColor.a);
-				else
-					ok = false;
-			}
-			else
-			{
-				ok &= Read(n, "BaseColor", m.BaseColor);
-			}
-			ok &= Read(n, "Metallic", m.Metallic);
-			ok &= Read(n, "Roughness", m.Roughness);
-			ok &= Read(n, "EmissiveColor", m.EmissiveColor);
-			ok &= Read(n, "EmissiveStrength", m.EmissiveStrength);
-			ok &= Read(n, "NormalScale", m.NormalScale);
-			ok &= Read(n, "OcclusionStrength", m.OcclusionStrength);
-			ok &= ReadEnum(n, "AlphaMode", s_AlphaModes, m.Alpha);
-			ok &= Read(n, "AlphaCutoff", m.AlphaCutoff);
-			ok &= Read(n, "DoubleSided", m.DoubleSided);
-			ok &= Read(n, "BaseColorTexture", m.BaseColorTexture);
-			ok &= Read(n, "MetallicRoughnessTexture", m.MetallicRoughnessTexture);
-			ok &= Read(n, "NormalTexture", m.NormalTexture);
-			ok &= Read(n, "OcclusionTexture", m.OcclusionTexture);
-			ok &= Read(n, "EmissiveTexture", m.EmissiveTexture);
-			return ok;
-		}
-
 		YAML::Node ToNode(const MeshRendererComponent& c)
 		{
 			YAML::Node n;
 			n["Mesh"] = c.Mesh;
 			n["Material"] = c.Material;
 			n["OverrideMaterial"] = c.OverrideMaterial;
-			n["MaterialOverride"] = ToNode(c.MaterialOverride);
+			n["MaterialOverride"] = MaterialSerializer::ToYAML(c.MaterialOverride);
 			n["CastShadows"] = c.CastShadows;
 			n["Visible"] = c.Visible;
 			return n;
@@ -267,7 +212,7 @@ namespace Ember {
 			ok &= Read(n, "OverrideMaterial", c.OverrideMaterial);
 			if (const YAML::Node material = n["MaterialOverride"]; material && material.IsMap())
 			{
-				ok &= FromNode(material, c.MaterialOverride);
+				ok &= MaterialSerializer::FromYAML(material, c.MaterialOverride);
 				// Patching the override implies wanting it used, unless explicitly stated otherwise.
 				if (!n["OverrideMaterial"])
 					c.OverrideMaterial = true;

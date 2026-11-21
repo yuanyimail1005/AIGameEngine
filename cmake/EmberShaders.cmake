@@ -21,7 +21,7 @@ function(ember_compile_shaders target)
 			OUTPUT "${spv}"
 			COMMAND "${CMAKE_COMMAND}" -E make_directory "${ARG_OUTPUT_DIR}"
 			COMMAND "${EMBER_GLSLANG}" -V --target-env vulkan1.2 -S ${stage}
-				-I"${CMAKE_SOURCE_DIR}/Ember/shaders/include" -o "${spv}" "${shader}"
+				"-I${CMAKE_SOURCE_DIR}/Ember/shaders/include" -o "${spv}" "${shader}"
 			DEPENDS "${shader}" ${EMBER_SHADER_INCLUDES}
 			COMMENT "Compiling shader ${shader_name}"
 			VERBATIM)

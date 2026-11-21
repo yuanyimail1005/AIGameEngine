@@ -1,0 +1,16 @@
+# Build output
+/build*/
+/out/
+/cmake-build-*/
+
+# IDE / tooling
+.vscode/
+.idea/
+.cache/
+*.swp
+compile_commands.json
+
+# Runtime artifacts
+imgui.ini
+*.log
+/Screenshots/

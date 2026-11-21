@@ -1,0 +1,26 @@
+diff --git a/src/vulkan/vulkan-allocator.cpp b/src/vulkan/vulkan-allocator.cpp
+index 7bc888b..657d440 100644
+--- a/src/vulkan/vulkan-allocator.cpp
++++ b/src/vulkan/vulkan-allocator.cpp
+@@ -113,6 +113,21 @@ namespace nvrhi::vulkan
+             }
+         }
+ 
++        if (memTypeIndex == memProperties.memoryTypeCount && (memPropertyFlags & vk::MemoryPropertyFlagBits::eHostCached))
++        {
++            // Some devices (e.g. Raspberry Pi V3DV) expose no HOST_CACHED memory type. Readback still works
++            // with plain host-visible memory, just with slower CPU reads.
++            const vk::MemoryPropertyFlags fallbackFlags = memPropertyFlags & ~vk::MemoryPropertyFlags(vk::MemoryPropertyFlagBits::eHostCached);
++            for(memTypeIndex = 0; memTypeIndex < memProperties.memoryTypeCount; memTypeIndex++)
++            {
++                if ((memRequirements.memoryTypeBits & (1 << memTypeIndex)) &&
++                    ((memProperties.memoryTypes[memTypeIndex].propertyFlags & fallbackFlags) == fallbackFlags))
++                {
++                    break;
++                }
++            }
++        }
++
+         if (memTypeIndex == memProperties.memoryTypeCount)
+         {
+             // xxxnsubtil: this is incorrect; need better error reporting

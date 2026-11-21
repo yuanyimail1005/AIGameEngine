@@ -1,0 +1,13 @@
+# Approximates the Hazel code style (tabs, Allman braces). Formatting is not enforced by CI;
+# follow AGENTS.md and match the surrounding code.
+BasedOnStyle: Microsoft
+UseTab: ForIndentation
+IndentWidth: 4
+TabWidth: 4
+ColumnLimit: 130
+NamespaceIndentation: All
+AccessModifierOffset: -4
+PointerAlignment: Left
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+SortIncludes: false

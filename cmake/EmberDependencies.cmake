@@ -101,7 +101,12 @@ FetchContent_Declare(yaml-cpp
 	GIT_TAG 0.8.0
 	GIT_SHALLOW TRUE
 	SYSTEM)
-FetchContent_MakeAvailable(yaml-cpp)
+# yaml-cpp 0.8.0 declares cmake_minimum_required(VERSION 3.4), which CMake 4.0+ rejects. Raise the policy floor
+# for this dependency only (the variable is ignored by CMake < 4.0). Remove when yaml-cpp is upgraded past 0.8.0.
+block()
+	set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+	FetchContent_MakeAvailable(yaml-cpp)
+endblock()
 
 # ---------------------------------------------------------------------------------------------------
 # Jolt Physics
@@ -178,6 +183,9 @@ target_include_directories(ember_imgui SYSTEM PUBLIC
 	"${imgui_SOURCE_DIR}" "${imgui_SOURCE_DIR}/backends" "${imgui_SOURCE_DIR}/misc/cpp" "${imguizmo_SOURCE_DIR}")
 target_link_libraries(ember_imgui PUBLIC glfw)
 target_compile_definitions(ember_imgui PUBLIC IMGUI_DEFINE_MATH_OPERATORS)
+# Ember renders with Vulkan only: keep glfw3.h from including the OpenGL headers in the ImGui GLFW backend, which
+# otherwise fails to build on systems without GL development headers.
+target_compile_definitions(ember_imgui PRIVATE GLFW_INCLUDE_NONE)
 
 # ---------------------------------------------------------------------------------------------------
 # nlohmann/json - AI control protocol (header only)

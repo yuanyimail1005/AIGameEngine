@@ -30,7 +30,7 @@ cmake --build build -j4
 ```
 
 * First configure downloads all dependencies (pinned tags/commits) — takes several minutes on a Pi.
-* Linux system packages: `libvulkan-dev glslang-tools ninja-build libwayland-dev libxkbcommon-dev xorg-dev`
+* Linux system packages: `libvulkan-dev glslang-tools ninja-build pkg-config libwayland-dev libxkbcommon-dev xorg-dev`
   (`vulkan-validationlayers` recommended — tests run with validation on and fail on validation errors).
 * `Dist` = shipping config: asserts off, `EMBER_DIST` defined, editor tooling compiled out.
 * Warnings are errors for Ember targets (`EMBER_WARNINGS_AS_ERRORS=ON`). Do not disable it; fix the warning.

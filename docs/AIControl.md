@@ -376,7 +376,7 @@ Deletes an asset file or directory.
 
 #### `import_file`
 
-Copies an external file (model, texture, HDRI, audio) into the asset directory.
+Copies an external file (model, texture, HDRI, audio, font) into the asset directory.
 
 | Parameter | Description |
 |---|---|
@@ -472,7 +472,7 @@ Leaves play mode (runtime changes are discarded).
 
 #### `capture`
 
-Renders the active scene to a PNG file and returns its path.
+Renders the active scene to a PNG file; returns its path and render statistics.
 
 | Parameter | Description |
 |---|---|

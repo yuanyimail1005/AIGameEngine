@@ -724,7 +724,7 @@ namespace Ember {
 			return Json{ { "removed", removed } };
 		});
 
-		Register("import_file", "Asset", "Copies an external file (model, texture, HDRI, audio) into the asset directory.",
+		Register("import_file", "Asset", "Copies an external file (model, texture, HDRI, audio, font) into the asset directory.",
 			{ { "source", "string - absolute path of the file to import" }, { "destination", "string - asset path" } }, [this](const Json& params)
 		{
 			Project& project = m_Context.RequireProject();
@@ -901,7 +901,7 @@ namespace Ember {
 			return Json{ { "result", result } };
 		});
 
-		Register("capture", "Render", "Renders the active scene to a PNG file and returns its path.",
+		Register("capture", "Render", "Renders the active scene to a PNG file; returns its path and render statistics.",
 			{ { "path", "string, optional - output file (default: <project>/Screenshots/capture_N.png)" },
 			  { "width", "integer, optional (default 960)" }, { "height", "integer, optional (default 540)" },
 			  { "camera", "string, optional - 'editor' or 'game' (default: game when playing or when the scene has a camera)" } },
@@ -926,7 +926,11 @@ namespace Ember {
 			if (!m_Context.CaptureToFile(path, width, height, camera == "game", &error))
 				throw CommandError(error);
 			std::error_code ec;
-			return Json{ { "path", std::filesystem::absolute(path, ec).string() }, { "width", width }, { "height", height }, { "camera", camera } };
+			const RenderStats stats = m_Context.GetCaptureStats();
+			const Json statsJson = { { "draw_calls", stats.DrawCalls }, { "shadow_draw_calls", stats.ShadowDrawCalls },
+				{ "triangles", stats.Triangles }, { "culled_objects", stats.CulledObjects }, { "ui_elements", stats.UIElements } };
+			return Json{ { "path", std::filesystem::absolute(path, ec).string() }, { "width", width }, { "height", height }, { "camera", camera },
+				{ "stats", statsJson } };
 		});
 
 		Register("set_editor_camera", "Render", "Positions the editor camera.",

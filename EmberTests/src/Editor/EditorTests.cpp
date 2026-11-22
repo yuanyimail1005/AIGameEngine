@@ -250,6 +250,28 @@ return M
 		CHECK(center[0] > center[1] * 2);
 		CHECK(f.Call("pick_entity", { { "x", 80 }, { "y", 45 } })["id"] == box["id"]);
 		CHECK(f.Call("pick_entity", { { "x", 2 }, { "y", 2 } }).is_null());
+		CHECK(captured["stats"]["draw_calls"].get<int>() > 0);
+		CHECK(captured["stats"]["ui_elements"] == 0);
+
+		// Screen-space UI created through the AI interface appears in captures and in the stats.
+		const Json types = f.Call("list_component_types");
+		CHECK(types.dump().find("\"UIText\"") != std::string::npos);
+		CHECK(types.dump().find("\"UIPanel\"") != std::string::npos);
+		f.Call("create_entity", { { "name", "HUD" }, { "components", {
+			{ "UIPanel", { { "Size", { 160, 160 } }, { "Color", { 1, 1, 1, 1 } }, { "Anchor", { 0, 0 } }, { "Pivot", { 0, 0 } } } },
+			{ "UIText", { { "Text", "42" }, { "FontSize", 64 }, { "Color", { 0, 0, 0, 1 } } } } } } });
+		CHECK(f.Call("get_component", { { "entity", "HUD" }, { "component", "UIText" } })["Text"] == "42");
+		CHECK(f.CallError("set_component", { { "entity", "HUD" }, { "component", "UIText" }, { "values", { { "Alignment", "Up" } } } })
+			.find("UIText") != std::string::npos);
+		const Json hudCapture = f.Call("capture", { { "path", (f.Root / "hud.png").string() }, { "width", 160 }, { "height", 90 } });
+		CHECK(hudCapture["stats"]["ui_elements"] == 2);
+		image = Image::LoadFromFile(f.Root / "hud.png");
+		REQUIRE(image.has_value());
+		const uint8_t* corner = image->GetPixel(5, 5); // white panel: 160x160 reference px = 20x20 screen px
+		CHECK(corner[0] == 255);
+		CHECK(corner[1] == 255);
+		f.Call("destroy_entity", { { "entity", "HUD" } });
+
 		f.Call("set_editor_camera", { { "position", { 3, 3, 3 } }, { "target", { 0, 0, 0 } } });
 		f.Call("focus_entity", { { "entity", "Box" } });
 		CHECK(f.Call("capture", { { "path", (f.Root / "editor.png").string() }, { "camera", "editor" } })["camera"] == "editor");

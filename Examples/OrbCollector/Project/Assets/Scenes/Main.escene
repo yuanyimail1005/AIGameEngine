@@ -1,7 +1,7 @@
 Scene: Main
 Version: 1
 Entities:
-  - Entity: 13869907004791945012
+  - Entity: 12378473518384973154
     Components:
       Tag:
         Tag: Main Camera
@@ -23,7 +23,7 @@ Entities:
         Script: Scripts/FollowCamera.lua
       AudioListener:
         Active: true
-  - Entity: 862376018822403912
+  - Entity: 15659540317470154460
     Components:
       Tag:
         Tag: Sun
@@ -36,7 +36,7 @@ Entities:
         Intensity: 3
         CastShadows: true
         ShadowSoftness: 0.800000012
-  - Entity: 13503831043537816167
+  - Entity: 12107596756959634564
     Components:
       Tag:
         Tag: Sky
@@ -49,7 +49,7 @@ Entities:
         Intensity: 0.800000012
         Rotation: 0
         DrawSkybox: true
-  - Entity: 15541314878960646320
+  - Entity: 16157701691732800421
     Components:
       Tag:
         Tag: Platform
@@ -94,7 +94,7 @@ Entities:
       BoxCollider:
         HalfExtents: [0.5, 0.5, 0.5]
         Offset: [0, 0, 0]
-  - Entity: 7008835129259684091
+  - Entity: 2046584850326688817
     Components:
       Tag:
         Tag: Rail0
@@ -128,7 +128,7 @@ Entities:
       BoxCollider:
         HalfExtents: [0.5, 0.5, 0.5]
         Offset: [0, 0, 0]
-  - Entity: 97975567232052810
+  - Entity: 16915152129740566482
     Components:
       Tag:
         Tag: Rail1
@@ -162,7 +162,7 @@ Entities:
       BoxCollider:
         HalfExtents: [0.5, 0.5, 0.5]
         Offset: [0, 0, 0]
-  - Entity: 17658892500364140975
+  - Entity: 6611927963701919569
     Components:
       Tag:
         Tag: Rail2
@@ -196,7 +196,7 @@ Entities:
       BoxCollider:
         HalfExtents: [0.5, 0.5, 0.5]
         Offset: [0, 0, 0]
-  - Entity: 11758229727973966683
+  - Entity: 17305758924573004662
     Components:
       Tag:
         Tag: Player
@@ -243,8 +243,8 @@ Entities:
         Offset: [0, 0, 0]
       Script:
         Script: Scripts/Player.lua
-  - Entity: 11911285125792582744
-    Children: [4348409851365995936]
+  - Entity: 3308541107344396834
+    Children: [2542568182462348008]
     Components:
       Tag:
         Tag: Sweeper
@@ -268,8 +268,8 @@ Entities:
         Offset: [0, 0, 0]
       Script:
         Script: Scripts/Sweeper.lua
-  - Entity: 4348409851365995936
-    Parent: 11911285125792582744
+  - Entity: 2542568182462348008
+    Parent: 3308541107344396834
     Components:
       Tag:
         Tag: SweeperBar
@@ -300,7 +300,7 @@ Entities:
           EmissiveTexture: ""
         CastShadows: true
         Visible: true
-  - Entity: 11452234040351563369
+  - Entity: 15748197815976730305
     Components:
       Tag:
         Tag: CenterLight
@@ -312,7 +312,7 @@ Entities:
         Color: [1, 0.5, 0.300000012]
         Intensity: 8
         Range: 9
-  - Entity: 6381363355275315142
+  - Entity: 13350978463649854698
     Components:
       Tag:
         Tag: Marker1
@@ -343,7 +343,7 @@ Entities:
           EmissiveTexture: ""
         CastShadows: true
         Visible: true
-  - Entity: 6788270660319179767
+  - Entity: 18169549335163264029
     Components:
       Tag:
         Tag: Marker2
@@ -374,7 +374,7 @@ Entities:
           EmissiveTexture: ""
         CastShadows: true
         Visible: true
-  - Entity: 9953924290958307069
+  - Entity: 8718229200153168360
     Components:
       Tag:
         Tag: Marker3
@@ -405,7 +405,7 @@ Entities:
           EmissiveTexture: ""
         CastShadows: true
         Visible: true
-  - Entity: 1874724202072948696
+  - Entity: 473685467243004214
     Components:
       Tag:
         Tag: Marker4
@@ -436,7 +436,7 @@ Entities:
           EmissiveTexture: ""
         CastShadows: true
         Visible: true
-  - Entity: 9333044739940225405
+  - Entity: 7263436578106276023
     Components:
       Tag:
         Tag: Marker5
@@ -467,7 +467,7 @@ Entities:
           EmissiveTexture: ""
         CastShadows: true
         Visible: true
-  - Entity: 15178281651664651072
+  - Entity: 7593150580188502063
     Components:
       Tag:
         Tag: Marker6
@@ -498,7 +498,7 @@ Entities:
           EmissiveTexture: ""
         CastShadows: true
         Visible: true
-  - Entity: 13574765929386907644
+  - Entity: 8764387920791275649
     Components:
       Tag:
         Tag: Marker7
@@ -529,7 +529,7 @@ Entities:
           EmissiveTexture: ""
         CastShadows: true
         Visible: true
-  - Entity: 12199641159255585925
+  - Entity: 6483835442411494163
     Components:
       Tag:
         Tag: Marker8
@@ -560,7 +560,112 @@ Entities:
           EmissiveTexture: ""
         CastShadows: true
         Visible: true
-  - Entity: 15088904646950712977
+  - Entity: 17814123671750210136
+    Components:
+      Tag:
+        Tag: HUDBar
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      UIPanel:
+        Size: [1280, 72]
+        Color: [0.0199999996, 0.0299999993, 0.0599999987, 0.550000012]
+        Texture: ""
+        Anchor: [0.5, 0]
+        Offset: [0, 0]
+        Pivot: [0.5, 0]
+        SortOrder: 0
+        Visible: true
+  - Entity: 733842788949200456
+    Components:
+      Tag:
+        Tag: ScoreText
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      UIText:
+        Text: Orbs 0 / 8
+        Font: ""
+        FontSize: 40
+        Color: [0.449999988, 1, 0.600000024, 1]
+        Alignment: Left
+        LineSpacing: 1
+        OutlineWidth: 2
+        OutlineColor: [0, 0, 0, 0.899999976]
+        Anchor: [0, 0]
+        Offset: [32, 36]
+        Pivot: [0, 0.5]
+        SortOrder: 1
+        Visible: true
+  - Entity: 13870612223977727087
+    Components:
+      Tag:
+        Tag: TimerText
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      UIText:
+        Text: Time 90
+        Font: ""
+        FontSize: 40
+        Color: [1, 1, 1, 1]
+        Alignment: Left
+        LineSpacing: 1
+        OutlineWidth: 2
+        OutlineColor: [0, 0, 0, 0.899999976]
+        Anchor: [1, 0]
+        Offset: [-32, 36]
+        Pivot: [1, 0.5]
+        SortOrder: 1
+        Visible: true
+  - Entity: 7049525756388640225
+    Components:
+      Tag:
+        Tag: HelpText
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      UIText:
+        Text: WASD / arrow keys to roll - avoid the red sweeper
+        Font: ""
+        FontSize: 24
+        Color: [1, 1, 1, 0.800000012]
+        Alignment: Left
+        LineSpacing: 1
+        OutlineWidth: 2
+        OutlineColor: [0, 0, 0, 0.899999976]
+        Anchor: [0.5, 1]
+        Offset: [0, -20]
+        Pivot: [0.5, 1]
+        SortOrder: 0
+        Visible: true
+  - Entity: 7059025389093017393
+    Components:
+      Tag:
+        Tag: MessageText
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      UIText:
+        Text: ""
+        Font: ""
+        FontSize: 96
+        Color: [1, 1, 1, 1]
+        Alignment: Center
+        LineSpacing: 1
+        OutlineWidth: 4
+        OutlineColor: [0, 0, 0, 1]
+        Anchor: [0.5, 0.5]
+        Offset: [0, 0]
+        Pivot: [0.5, 0.5]
+        SortOrder: 2
+        Visible: false
+  - Entity: 5707676231559687495
     Components:
       Tag:
         Tag: GameManager

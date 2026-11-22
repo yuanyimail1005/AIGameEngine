@@ -211,6 +211,7 @@ namespace Ember {
 		m_EmbeddedImages.clear();
 		m_MaterialAssets.clear();
 		m_Environments.clear();
+		m_Fonts.clear();
 		m_Materials.clear();
 		m_FailedAssets.clear();
 	}
@@ -607,6 +608,57 @@ namespace Ember {
 		}
 		m_Textures[key] = texture;
 		return texture;
+	}
+
+	// ----------------------------------------------------------------------------------------------
+	// Fonts
+
+	std::optional<GpuFont> RenderAssets::CreateGpuFont(const Ref<Font>& font)
+	{
+		if (!font)
+			return std::nullopt;
+		nvrhi::TextureDesc desc;
+		desc.width = font->GetAtlasWidth();
+		desc.height = font->GetAtlasHeight();
+		desc.format = nvrhi::Format::R8_UNORM;
+		desc.debugName = "FontAtlas:" + font->GetName();
+		desc.initialState = nvrhi::ResourceStates::ShaderResource;
+		desc.keepInitialState = true;
+		nvrhi::TextureHandle texture = m_Device->createTexture(desc);
+		if (!texture)
+			return std::nullopt;
+
+		nvrhi::CommandListHandle commandList = m_Device->createCommandList();
+		commandList->open();
+		commandList->writeTexture(texture, 0, 0, font->GetAtlasPixels().data(), font->GetAtlasWidth());
+		commandList->close();
+		m_Device->executeCommandList(commandList);
+		return GpuFont{ font, texture };
+	}
+
+	const GpuFont* RenderAssets::GetFont(const std::string& path)
+	{
+		if (!path.empty())
+		{
+			if (auto it = m_Fonts.find(path); it != m_Fonts.end())
+				return &it->second;
+			if (!m_FailedAssets.contains(path))
+			{
+				Ref<Font> font;
+				if (FileSystem::IsSafeRelativePath(path))
+					font = Font::LoadFromFile(m_AssetDirectory / path);
+				else
+					EMBER_CORE_ERROR("Font path '{}' must be relative to the asset directory", path);
+				if (std::optional<GpuFont> gpuFont = CreateGpuFont(font))
+					return &m_Fonts.emplace(path, std::move(*gpuFont)).first->second;
+				EMBER_CORE_WARN("Using the built-in font instead of '{}'", path);
+				m_FailedAssets.insert(path);
+			}
+		}
+
+		if (!m_DefaultFont)
+			m_DefaultFont = CreateGpuFont(Font::GetDefault());
+		return m_DefaultFont ? &*m_DefaultFont : nullptr;
 	}
 
 	std::optional<MaterialParameters> RenderAssets::GetMaterialAsset(const std::string& path)

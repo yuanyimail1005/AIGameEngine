@@ -5,6 +5,7 @@
 #include "Ember/Core/FileSystem.h"
 #include "Ember/Core/Input.h"
 #include "Ember/Core/Log.h"
+#include "Ember/Core/YAMLUtils.h"
 #include "Ember/Math/Math.h"
 #include "Ember/Physics/PhysicsWorld.h"
 #include "Ember/Scene/ComponentRegistry.h"
@@ -137,6 +138,8 @@ namespace Ember {
 			if (node.IsScalar())
 			{
 				const std::string& text = node.Scalar();
+				if (IsStringNode(node))
+					return sol::make_object(lua, text);
 				if (text == "true")
 					return sol::make_object(lua, true);
 				if (text == "false")

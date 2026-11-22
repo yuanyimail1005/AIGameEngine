@@ -96,6 +96,21 @@ namespace YAML {
 
 namespace Ember {
 
+	// Scalar node that generic converters (JSON for the AI interface, Lua tables) must treat as a string even when the
+	// text looks like a number or boolean (e.g. a UI text "42"). Uses the YAML non-specific tag "!", which the parser
+	// also gives quoted scalars and the emitter does not write, so the file format is unchanged.
+	inline YAML::Node MakeStringNode(const std::string& text)
+	{
+		YAML::Node node(text);
+		node.SetTag("!");
+		return node;
+	}
+
+	inline bool IsStringNode(const YAML::Node& node)
+	{
+		return node.IsScalar() && node.Tag() == "!";
+	}
+
 	// Reads node[key] into value if present and convertible. Returns true if the value was read.
 	// Missing keys leave value untouched, which is what makes partial updates ("patches") work.
 	template<typename T>

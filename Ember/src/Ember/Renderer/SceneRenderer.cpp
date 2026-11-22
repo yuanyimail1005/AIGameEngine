@@ -176,6 +176,7 @@ namespace Ember {
 			m_DepthFormat = nvrhi::Format::D16;
 
 		m_CommandList = m_Device->createCommandList();
+		m_UIRenderer = CreateScope<UIRenderer>(assets);
 		m_FrameConstants = m_Device->createBuffer(nvrhi::utils::CreateVolatileConstantBufferDesc(sizeof(FrameConstants), "FrameConstants", 16));
 
 		auto makeLayout = [&](std::initializer_list<nvrhi::BindingLayoutItem> items)
@@ -875,6 +876,7 @@ namespace Ember {
 		CollectScene(scene, camera, frame);
 		UpdateFrameBindings(frame.EnvironmentMaps);
 		m_CurrentEnvironment = frame.EnvironmentMaps;
+		m_Stats.UIElements = m_UIRenderer->Prepare(scene, m_Width, m_Height);
 
 		m_CommandList->open();
 		m_CommandList->writeBuffer(m_FrameConstants, &frame.Constants, sizeof(frame.Constants));
@@ -883,6 +885,7 @@ namespace Ember {
 		RenderSSAO(m_CommandList);
 		RenderForward(m_CommandList, frame);
 		RenderTonemap(m_CommandList);
+		m_UIRenderer->Render(m_CommandList, m_LDRFramebuffer);
 		if (m_OverlayCallback)
 			m_OverlayCallback(m_CommandList, m_LDRFramebuffer, camera);
 		m_CommandList->close();

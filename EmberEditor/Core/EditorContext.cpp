@@ -290,6 +290,11 @@ namespace Ember {
 		return true;
 	}
 
+	RenderStats EditorContext::GetCaptureStats() const
+	{
+		return m_CaptureRenderer ? m_CaptureRenderer->GetStats() : RenderStats{};
+	}
+
 	UUID EditorContext::PickEntity(uint32_t x, uint32_t y, bool fromViewport)
 	{
 		if (fromViewport)

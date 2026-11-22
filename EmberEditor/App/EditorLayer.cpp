@@ -257,6 +257,7 @@ namespace Ember {
 				if (ext == ".gltf" || ext == ".glb") folder = "Models";
 				else if (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".tga") folder = "Textures";
 				else if (ext == ".hdr") folder = "HDRI";
+				else if (ext == ".ttf" || ext == ".otf") folder = "Fonts";
 				else if (ext == ".wav" || ext == ".mp3" || ext == ".flac" || ext == ".ogg") folder = "Audio";
 				else if (ext == ".lua") folder = "Scripts";
 				try

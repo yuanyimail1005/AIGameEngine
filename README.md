@@ -14,6 +14,8 @@ complete game with it** through the editor's JSON control interface: no clicking
   [Poly Haven](https://polyhaven.com/hdris)) or a procedural sky, cascaded soft shadows (PCSS), SSAO, HDR pipeline
   with ACES tonemapping, directional/point/spot lights, emissive/alpha-mask/transparent materials, glTF 2.0
   models and textures, frustum culling.
+- **UI**: screen-space text (signed-distance-field fonts with outlines, built-in font or any TTF/OTF) and
+  solid or textured panels, laid out in resolution-independent reference pixels.
 - **Scene**: entity-component system (EnTT) with hierarchy, prefabs and readable YAML scene files.
 - **Physics**: Jolt Physics: dynamic/kinematic/static bodies, box/sphere/capsule colliders, triggers, raycasts,
   forces, collision callbacks.
@@ -34,7 +36,7 @@ Requirements: CMake 3.25+, a C++20 compiler (GCC 11+, Clang 14+, MSVC 2022), the
 **Linux / Raspberry Pi OS**
 
 ```bash
-sudo apt install cmake ninja-build libvulkan-dev glslang-tools spirv-tools libwayland-dev libxkbcommon-dev xorg-dev \
+sudo apt install cmake ninja-build pkg-config libvulkan-dev glslang-tools spirv-tools libwayland-dev libxkbcommon-dev xorg-dev \
                  vulkan-validationlayers   # optional, recommended for development
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j4
@@ -89,7 +91,7 @@ Agents using Claude Code get step-by-step guidance from the skills in `.claude/s
 `ember-engine-dev`).
 
 **Example**: [`Examples/OrbCollector/build_game.py`](Examples/OrbCollector/build_game.py) builds a complete small
-game (rolling-ball orb collector with physics, triggers, prefabs, scoring, sounds and a follow camera) purely
+game (rolling-ball orb collector with physics, triggers, prefabs, a score and countdown HUD, sounds and a follow camera) purely
 through the AI interface, play-tests it with simulated keyboard input and exports it. Open the result with
 `./build/bin/EmberEditor --project Examples/OrbCollector/Project`.
 
@@ -132,5 +134,6 @@ Development guidelines: [AGENTS.md](AGENTS.md).
 ## License and third-party software
 
 Ember uses GLFW, NVRHI, Vulkan-Headers, glm, spdlog, EnTT, yaml-cpp, Jolt Physics, Lua, sol2, miniaudio, cgltf,
-stb, Dear ImGui, ImGuizmo, nlohmann/json and doctest; see each project for its license. Pinned versions are listed in
+stb, Dear ImGui, ImGuizmo, nlohmann/json and doctest; see each project for its license. The built-in UI font is
+Roboto Medium (Apache License 2.0), embedded from the Dear ImGui sources. Pinned versions are listed in
 `cmake/EmberDependencies.cmake`.

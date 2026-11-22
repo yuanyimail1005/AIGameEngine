@@ -111,6 +111,18 @@ def main():
         editor.call("create_prefab", entity=projectile["id"], path="Prefabs/Projectile.eprefab")
         editor.call("destroy_entity", entity=projectile["id"])
 
+        # Screen-space UI (HUD): translucent panel, outlined title, live status text (updated by FeatureTest.lua),
+        # textured icon in the top-right corner
+        create("HUDPanel", UIPanel={"Size": [430, 112], "Color": [0.0, 0.0, 0.0, 0.45], "Anchor": [0, 0],
+                                    "Pivot": [0, 0], "Offset": [16, 16], "SortOrder": 0})
+        create("HUDTitle", UIText={"Text": "Ember Feature Test", "FontSize": 40, "Color": [1.0, 0.85, 0.35, 1.0],
+                                   "OutlineWidth": 2, "OutlineColor": [0.15, 0.05, 0.0, 1.0], "Anchor": [0, 0],
+                                   "Pivot": [0, 0], "Offset": [32, 26], "SortOrder": 1})
+        create("HUDStatus", UIText={"Text": "Starting...", "FontSize": 26, "Color": [0.9, 0.95, 1.0, 1.0],
+                                    "Anchor": [0, 0], "Pivot": [0, 0], "Offset": [32, 80], "SortOrder": 1})
+        create("HUDIcon", UIPanel={"Size": [64, 64], "Texture": "Textures/checker.png", "Anchor": [1, 0],
+                                   "Pivot": [1, 0], "Offset": [-16, 16], "SortOrder": 0})
+
         # Test controller
         create("TestController", Script={"Script": "Scripts/FeatureTest.lua"})
 

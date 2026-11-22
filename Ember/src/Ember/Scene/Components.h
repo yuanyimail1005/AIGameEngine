@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Ember/Core/UUID.h"
+#include "Ember/Renderer/Font.h"
 #include "Ember/Renderer/MaterialParameters.h"
 #include "Ember/Scene/SceneCamera.h"
 
@@ -175,6 +176,43 @@ namespace Ember {
 		std::string Prefab; // asset path to the .eprefab
 	};
 
+	// Screen-space UI, drawn over the rendered scene. Independent of the entity transform.
+	// Coordinates are in reference pixels with (0, 0) at the top-left and +Y down; the UI is scaled by
+	// viewport height / 720, so a layout designed for 1280x720 keeps its proportions at any resolution.
+	// The element is placed so that its Pivot point lands on Anchor * screen size + Offset:
+	//   Anchor (0, 0) = top-left corner of the screen, (0.5, 0.5) = center, (1, 1) = bottom-right.
+	//   Pivot  (0, 0) = top-left corner of the element, (0.5, 0.5) = its center.
+	// Elements are drawn in ascending SortOrder (ties: creation order), panels and texts interleaved.
+	struct UITextComponent
+	{
+		std::string Text;
+		std::string Font;           // .ttf / .otf asset path; empty = built-in font
+		float FontSize = 32.0f;     // reference pixels (line height from ascender to descender)
+		glm::vec4 Color{ 1.0f };    // display (sRGB) color with alpha
+		TextAlignment Alignment = TextAlignment::Left; // of lines within a multi-line block
+		float LineSpacing = 1.0f;
+		float OutlineWidth = 0.0f;  // reference pixels; 0 = no outline
+		glm::vec4 OutlineColor{ 0.0f, 0.0f, 0.0f, 1.0f };
+		glm::vec2 Anchor{ 0.5f };
+		glm::vec2 Offset{ 0.0f };
+		glm::vec2 Pivot{ 0.5f };
+		int SortOrder = 0;
+		bool Visible = true;
+	};
+
+	// A solid or textured rectangle (backgrounds, health bars, icons).
+	struct UIPanelComponent
+	{
+		glm::vec2 Size{ 100.0f };   // reference pixels
+		glm::vec4 Color{ 1.0f };    // display (sRGB) color with alpha; multiplies the texture
+		std::string Texture;        // optional image asset path
+		glm::vec2 Anchor{ 0.5f };
+		glm::vec2 Offset{ 0.0f };
+		glm::vec2 Pivot{ 0.5f };
+		int SortOrder = 0;
+		bool Visible = true;
+	};
+
 	template<typename... Component>
 	struct ComponentGroup
 	{
@@ -186,6 +224,6 @@ namespace Ember {
 		TransformComponent, RelationshipComponent, CameraComponent, MeshRendererComponent,
 		DirectionalLightComponent, PointLightComponent, SpotLightComponent, SkyLightComponent,
 		RigidBodyComponent, BoxColliderComponent, SphereColliderComponent, CapsuleColliderComponent,
-		ScriptComponent, AudioSourceComponent, AudioListenerComponent, PrefabComponent>;
+		ScriptComponent, AudioSourceComponent, AudioListenerComponent, UITextComponent, UIPanelComponent, PrefabComponent>;
 
 }

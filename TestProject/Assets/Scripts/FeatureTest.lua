@@ -30,7 +30,7 @@ end
 
 function FeatureTest:OnCreate()
 	self.frame = 0
-	for _, name in ipairs({ "api", "components", "physics", "triggers", "projectiles", "late update", "kinematic", "complete" }) do
+	for _, name in ipairs({ "api", "components", "physics", "triggers", "projectiles", "late update", "kinematic", "ui", "complete" }) do
 		Test.Expect(name)
 	end
 
@@ -121,12 +121,16 @@ function FeatureTest:OnCreate()
 	TestComponentRoundTrip(e, "CapsuleCollider", { HalfHeight = 1.25 }, "HalfHeight", 1.25)
 	TestComponentRoundTrip(e, "AudioSource", { Clip = "Audio/bounce.wav", Volume = 0.25 }, "Volume", 0.25)
 	TestComponentRoundTrip(e, "AudioListener", { Active = false }, "Active", false)
+	TestComponentRoundTrip(e, "UIText", { Text = "123", FontSize = 20, Alignment = "Center", Anchor = vec2(1, 1) }, "Text", "123")
+	TestComponentRoundTrip(e, "UIText", { Color = { 1, 0, 0, 0.5 } }, "Alignment", "Center")
+	TestComponentRoundTrip(e, "UIPanel", { Size = vec2(40, 10), Texture = "Textures/checker.png", SortOrder = 5 }, "Size", vec2(40, 10))
+	TestComponentRoundTrip(e, "UIPanel", { Visible = false }, "SortOrder", 5)
 	TestComponentRoundTrip(e, "Prefab", { Prefab = "Prefabs/Projectile.eprefab" }, "Prefab", "Prefabs/Projectile.eprefab")
 	TestComponentRoundTrip(e, "Transform", { Translation = vec3(10, 2, 0) }, "Translation", vec3(10, 2, 0))
 	TestComponentRoundTrip(e, "Tag", { Tag = "ScratchEntity" }, "Tag", "ScratchEntity")
 	Check(e:SetComponent("PointLight", { Range = 4.0 }) and U.Near(e:GetComponent("PointLight").Range, 4.0) and U.Near(e:GetComponent("PointLight").Intensity, 2.0), "SetComponent patch semantics")
 	e:RefreshPhysics()
-	for _, component in ipairs({ "Camera", "DirectionalLight", "SpotLight", "SkyLight", "SphereCollider", "CapsuleCollider", "AudioSource", "AudioListener" }) do
+	for _, component in ipairs({ "Camera", "DirectionalLight", "SpotLight", "SkyLight", "SphereCollider", "CapsuleCollider", "AudioSource", "AudioListener", "UIText", "UIPanel" }) do
 		Check(e:RemoveComponent(component) and not e:HasComponent(component), component .. ": RemoveComponent")
 	end
 	e:SetColor(1, 0, 0)
@@ -161,6 +165,12 @@ end
 function FeatureTest:OnUpdate(dt)
 	self.frame = self.frame + 1
 	local frame = self.frame
+
+	-- HUD: live status text in the screen-space UI
+	local status = Scene.FindEntityByName("HUDStatus")
+	if status then
+		status:SetComponent("UIText", { Text = string.format("Frame %d   Time %.1f s   Entities %d", frame, Scene.GetTime(), Scene.GetEntityCount()) })
+	end
 
 	if frame == 2 then
 		local spinner = Scene.FindEntityByName("Spinner"):GetScript()
@@ -206,6 +216,15 @@ function FeatureTest:OnUpdate(dt)
 		Check(Scene.GetTime() > 4.0, "Scene.GetTime advances")
 		Check(self.scratch:IsValid(), "scratch entity alive")
 		Scene.Destroy(self.scratch)
+
+		local hudText = status and status:GetComponent("UIText")
+		Check(hudText ~= nil and hudText.Text:find("Frame 260", 1, true) == 1, "HUD status text updated", hudText and hudText.Text)
+		local title = Scene.FindEntityByName("HUDTitle")
+		Check(title ~= nil and title:GetComponent("UIText").OutlineWidth > 0, "HUD title outline")
+		local icon = Scene.FindEntityByName("HUDIcon")
+		Check(icon ~= nil and icon:GetComponent("UIPanel").Anchor == vec2(1, 0), "HUD icon anchored top-right")
+		Check(#Scene.GetEntitiesWith("UIText") == 2 and #Scene.GetEntitiesWith("UIPanel") == 2, "HUD element counts")
+		Test.Pass("ui")
 		Test.Pass("complete")
 		Log.Info("Feature test complete")
 	end

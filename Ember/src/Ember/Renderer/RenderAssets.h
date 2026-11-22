@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Ember/Core/Base.h"
+#include "Ember/Renderer/Font.h"
 #include "Ember/Renderer/MaterialParameters.h"
 #include "Ember/Renderer/Mesh.h"
 #include "Ember/Renderer/RenderTypes.h"
@@ -36,6 +37,13 @@ namespace Ember {
 		uint32_t PrefilteredMipCount = 1;
 	};
 
+	// Font with its distance field atlas uploaded as an R8 texture.
+	struct GpuFont
+	{
+		Ref<Font> Data;
+		nvrhi::TextureHandle Atlas;
+	};
+
 	// Shared GPU resources and asset caches for rendering: shaders, samplers, binding layouts, default textures,
 	// models (glTF / built-in primitives), textures, materials and environments. One instance per device.
 	//
@@ -61,6 +69,9 @@ namespace Ember {
 		// Returns the GPU material for the given parameters (content-addressed cache).
 		GpuMaterial* GetMaterial(const MaterialParameters& parameters);
 		const GpuMaterial* GetDefaultMaterial() { return GetMaterial(MaterialParameters{}); }
+		// Font for a .ttf/.otf asset path; empty = the built-in font. Falls back to the built-in font (logged once)
+		// if the file cannot be loaded. Returns nullptr only if no font at all is available.
+		const GpuFont* GetFont(const std::string& path);
 		// Image-based lighting for an HDRI path (empty = procedural sky). Falls back to procedural on failure.
 		Ref<Environment> GetEnvironment(const std::string& hdrPath);
 
@@ -105,6 +116,7 @@ namespace Ember {
 		Ref<Model> LoadModelFromFile(const std::string& path);
 		Ref<Model> LoadGltf(const std::string& path);
 		Ref<Environment> BuildEnvironment(const std::string& hdrPath);
+		std::optional<GpuFont> CreateGpuFont(const Ref<Font>& font);
 		void CreateBRDFLut();
 		void RunCompute(nvrhi::ICommandList* commandList, const char* shader, nvrhi::ITexture* input, nvrhi::TextureDimension inputDimension,
 			nvrhi::ITexture* output, uint32_t outputMip, bool outputIsCube, const void* constants, uint32_t constantsSize,
@@ -130,6 +142,8 @@ namespace Ember {
 		std::unordered_map<std::string, std::vector<uint8_t>> m_EmbeddedImages; // encoded images from .glb files
 		std::unordered_map<std::string, MaterialParameters> m_MaterialAssets;
 		std::unordered_map<std::string, Ref<Environment>> m_Environments;
+		std::unordered_map<std::string, GpuFont> m_Fonts; // node-based: pointers stay valid until ClearCaches()
+		std::optional<GpuFont> m_DefaultFont;
 		std::unordered_multimap<size_t, Scope<GpuMaterial>> m_Materials;
 		std::unordered_set<std::string> m_FailedAssets;
 	};

@@ -1,5 +1,7 @@
 #include "JsonUtils.h"
 
+#include "Ember/Core/YAMLUtils.h"
+
 #include <charconv>
 #include <cstdlib>
 
@@ -12,6 +14,8 @@ namespace Ember::JsonUtils {
 		if (node.IsScalar())
 		{
 			const std::string& text = node.Scalar();
+			if (IsStringNode(node))
+				return text;
 			if (text == "true")
 				return true;
 			if (text == "false")

@@ -3,6 +3,7 @@
 #include "TestUtils.h"
 
 #include "Ember/Core/Input.h"
+#include "Ember/Scene/ComponentRegistry.h"
 #include "Ember/Scene/Entity.h"
 #include "Ember/Scene/Scene.h"
 #include "Ember/Scene/SceneSerializer.h"
@@ -179,6 +180,63 @@ return T
 		CHECK(fixture.Scripts().GetTestResults().size() > 30);
 		CHECK_FALSE(fixture.SceneRef->FindEntityByName("Child")); // destroyed at end of frame
 		CHECK(fixture.SceneRef->FindEntityByName("Renamed"));
+		fixture.SceneRef->OnRuntimeStop();
+	}
+
+	TEST_CASE("Scripting: UI text and panel components drive a HUD")
+	{
+		ScriptFixture fixture("script_ui");
+		Entity hud = fixture.AddScripted("HUD", "Scripts/HUD.lua", R"(
+local HUD = {}
+function HUD:OnCreate()
+	self.score = 0
+	local e = self.entity
+	Test.Check(e:AddComponent("UIText", { Text = "Score: 0", FontSize = 48, Anchor = vec2(0, 0), Pivot = vec2(0, 0),
+		Offset = vec2(20, 20), Color = { 1, 0.8, 0.2, 1 }, Alignment = "Right" }), "add UIText")
+	local bar = Scene.CreateEntity("HealthBar")
+	Test.Check(bar:AddComponent("UIPanel", { Size = vec2(200, 20), Color = { 0, 1, 0, 0.8 }, SortOrder = -1 }), "add UIPanel")
+	local ui = e:GetComponent("UIText")
+	Test.Check(ui.Text == "Score: 0" and ui.FontSize == 48, "UIText values")
+	Test.Check(ui.Anchor == vec2(0, 0) and ui.Offset == vec2(20, 20), "UIText vec2 fields")
+	Test.Check(ui.Alignment == "Right", "UIText alignment")
+	Test.Check(math.abs(ui.Color[2] - 0.8) < 1e-6 and ui.Color[4] == 1, "UIText color array")
+	Test.Check(bar:GetComponent("UIPanel").SortOrder == -1, "UIPanel sort order")
+	-- String fields stay strings even when they look like numbers or booleans.
+	e:SetComponent("UIText", { Text = "100" })
+	Test.Check(e:GetComponent("UIText").Text == "100", "numeric text stays a string")
+	e:SetComponent("UIText", { Text = "true" })
+	Test.Check(e:GetComponent("UIText").Text == "true", "boolean-like text stays a string")
+	Test.Check(type(e:GetComponent("UIText").FontSize) == "number", "numbers stay numbers")
+end
+function HUD:OnUpdate(dt)
+	self.score = self.score + 10
+	self.entity:SetComponent("UIText", { Text = "Score: " .. self.score })
+	local bar = Scene.FindEntityByName("HealthBar")
+	bar:SetComponent("UIPanel", { Size = vec2(200 - self.score, 20) })
+end
+return HUD
+)");
+		fixture.SceneRef->OnRuntimeStart();
+		fixture.Run(3);
+		fixture.RequireAllTestsPassed();
+
+		REQUIRE(hud.HasComponent<UITextComponent>());
+		const auto& text = hud.GetComponent<UITextComponent>();
+		CHECK(text.Text == "Score: 30");
+		CHECK(text.FontSize == doctest::Approx(48.0f));
+		CHECK(text.Alignment == TextAlignment::Right);
+		CHECK(text.Color == glm::vec4(1.0f, 0.8f, 0.2f, 1.0f));
+		CHECK(text.Offset == glm::vec2(20.0f, 20.0f));
+		Entity bar = fixture.SceneRef->FindEntityByName("HealthBar");
+		REQUIRE(bar);
+		CHECK(bar.GetComponent<UIPanelComponent>().Size == glm::vec2(170.0f, 20.0f));
+		CHECK(bar.GetComponent<UIPanelComponent>().SortOrder == -1);
+
+		// Unknown enum values are rejected and leave the field unchanged; valid fields in the same patch still apply.
+		CHECK_FALSE(ComponentRegistry::Find("UIText")->Deserialize(hud, YAML::Load("{Alignment: Diagonal, FontSize: 20}")));
+		CHECK(text.Alignment == TextAlignment::Right);
+		CHECK(text.FontSize == doctest::Approx(20.0f));
+		CHECK(ComponentRegistry::Find("uitextcomponent") == ComponentRegistry::Find("UIText"));
 		fixture.SceneRef->OnRuntimeStop();
 	}
 

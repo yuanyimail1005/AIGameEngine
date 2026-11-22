@@ -1,7 +1,7 @@
 Prefab: Projectile
 Version: 1
 Entities:
-  - Entity: 2876077020185290120
+  - Entity: 12886552074826769814
     Components:
       Tag:
         Tag: Projectile

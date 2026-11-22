@@ -23,7 +23,8 @@ renderer-test frame as PNG; look at them).
 ## Adding a component
 
 1. Struct in `Ember/src/Ember/Scene/Components.h` (plain data, defaults for every field) and add it to `AllComponents`.
-2. Register in `ComponentRegistry.cpp`: `ToNode` / `FromNode` (patch semantics: only present keys), and a
+2. Register in `ComponentRegistry.cpp`: `ToNode` / `FromNode` (patch semantics: only present keys; write string
+   fields with `MakeStringNode` so the AI/Lua converters never turn text like "42" into a number), and a
    `MakeInfo<T>("Name", "Category")` line. This alone makes it work in serialization, prefabs, the inspector,
    Lua `Get/Set/AddComponent` and the AI interface.
 3. Implement the behaviour in the owning system (renderer / physics / audio / scripts) - read the component each
@@ -63,6 +64,11 @@ renderer-test frame as PNG; look at them).
   comparison samplers), no `HOST_CACHED` memory (handled by `cmake/patches/nvrhi-host-cached-fallback.patch`).
 - Every GPU test ends with `CHECK(gpu->GetErrorCount() == 0)`; the Khronos validation layer is active in tests.
 - Never open a command list you might not submit (leaks the Vulkan command buffer) - validate inputs first.
+- Only one immediate command list may be open at a time. `RenderAssets` loads (models, textures, fonts) submit their
+  own uploads, so resolve every asset a pass needs before the frame's command list is opened (see
+  `UIRenderer::Prepare` / `Render`).
+- Binary resources the engine needs at runtime (e.g. the default font) are embedded with `ember_embed_resources` in
+  `Ember/CMakeLists.txt` and read with `EmbeddedResources::Find("<Name>")`.
 
 ## Committing
 

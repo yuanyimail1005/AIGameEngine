@@ -5,6 +5,7 @@
 #include "Ember/Renderer/Image.h"
 #include "Ember/Renderer/RenderAssets.h"
 #include "Ember/Renderer/RenderTypes.h"
+#include "Ember/Renderer/UIRenderer.h"
 
 #include <nvrhi/nvrhi.h>
 
@@ -18,7 +19,7 @@ namespace Ember {
 	class Scene;
 
 	// Renders a Scene from a camera into offscreen targets:
-	//   shadow cascades -> depth/normal/ID prepass -> SSAO -> forward PBR -> skybox -> transparents -> tonemap.
+	//   shadow cascades -> depth/normal/ID prepass -> SSAO -> forward PBR -> skybox -> transparents -> tonemap -> UI.
 	// The result (GetFinalImage) is an RGBA8 image with sRGB-encoded colors, ready to display or save.
 	class SceneRenderer
 	{
@@ -47,7 +48,7 @@ namespace Ember {
 		RenderSettings& GetSettings() { return m_Settings; }
 		const RenderStats& GetStats() const { return m_Stats; }
 
-		// Called after tonemapping with the LDR framebuffer (editor grid, selection outlines, gizmos).
+		// Called after tonemapping and the screen-space UI with the LDR framebuffer (editor grid, selection outlines, gizmos).
 		using OverlayCallback = std::function<void(nvrhi::ICommandList*, nvrhi::IFramebuffer*, const RenderCamera&)>;
 		void SetOverlayCallback(OverlayCallback callback) { m_OverlayCallback = std::move(callback); }
 
@@ -83,6 +84,7 @@ namespace Ember {
 		RenderSettings m_Settings;
 		RenderStats m_Stats;
 		OverlayCallback m_OverlayCallback;
+		Scope<UIRenderer> m_UIRenderer;
 
 		uint32_t m_Width = 0;
 		uint32_t m_Height = 0;

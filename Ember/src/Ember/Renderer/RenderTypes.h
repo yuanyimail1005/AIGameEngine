@@ -81,6 +81,7 @@ namespace Ember {
 		uint32_t Triangles = 0;
 		uint32_t CulledObjects = 0;
 		uint32_t ShadowDrawCalls = 0;
+		uint32_t UIElements = 0; // visible UI panels and texts drawn
 	};
 
 }

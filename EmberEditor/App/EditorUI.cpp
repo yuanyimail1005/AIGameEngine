@@ -42,6 +42,7 @@ namespace Ember {
 				{ "Type", { "Static", "Dynamic", "Kinematic" } },
 				{ "ProjectionType", { "Perspective", "Orthographic" } },
 				{ "AlphaMode", { "Opaque", "Mask", "Blend" } },
+				{ "Alignment", { "Left", "Center", "Right" } },
 			};
 			return s_Options;
 		}
@@ -49,7 +50,7 @@ namespace Ember {
 		bool IsAssetField(const std::string& key)
 		{
 			return key == "Mesh" || key == "Material" || key == "Script" || key == "Clip" || key == "EnvironmentMap" ||
-				key == "Prefab" || (key.size() > 7 && key.substr(key.size() - 7) == "Texture");
+				key == "Prefab" || key == "Font" || (key.size() >= 7 && key.substr(key.size() - 7) == "Texture");
 		}
 
 		bool IsNumber(const std::string& text, double& value)
@@ -153,6 +154,21 @@ namespace Ember {
 				return changed;
 			}
 
+			// Free text (may look like a number, e.g. a score) - multi-line editing.
+			if (key == "Text")
+			{
+				std::string buffer = text;
+				ImGui::InputTextMultiline(key.c_str(), &buffer, ImVec2(0.0f, ImGui::GetTextLineHeight() * 3.5f));
+				activated |= ImGui::IsItemActivated();
+				if (ImGui::IsItemDeactivatedAfterEdit() && buffer != text)
+				{
+					patch[key] = buffer;
+					changed = true;
+				}
+				ImGui::PopID();
+				return changed;
+			}
+
 			double number = 0.0;
 			if (text == "true" || text == "false")
 			{
@@ -163,6 +179,14 @@ namespace Ember {
 					patch[key] = flag;
 					changed = true;
 				}
+			}
+			else if (key == "SortOrder" && IsNumber(text, number))
+			{
+				int intValue = static_cast<int>(number);
+				changed = ImGui::DragInt(key.c_str(), &intValue, 0.1f);
+				activated |= ImGui::IsItemActivated();
+				if (changed)
+					patch[key] = intValue;
 			}
 			else if (IsNumber(text, number) && !IsAssetField(key) && key != "Tag")
 			{
@@ -397,6 +421,9 @@ namespace Ember {
 							{ "components", { { "MeshRenderer", { { "Mesh", path } } } } } });
 					else if (ext == ".hdr")
 						m_Commands->Execute("create_entity", { { "name", "Sky" }, { "components", { { "SkyLight", { { "EnvironmentMap", path } } } } } });
+					else if (ext == ".ttf" || ext == ".otf")
+						m_Commands->Execute("create_entity", { { "name", "Text" },
+							{ "components", { { "UIText", { { "Text", "Text" }, { "Font", path } } } } } });
 				}
 				catch (const CommandError& error)
 				{
@@ -749,7 +776,8 @@ namespace Ember {
 		ImGui::Text("Frame: %.2f ms (%.0f FPS)", Application::Get().GetLastFrameTime() * 1000.0f,
 			1.0f / std::max(Application::Get().GetLastFrameTime(), 1e-4f));
 		ImGui::Text("GPU: %s", m_Context->GetGraphicsDevice().GetAdapterName().c_str());
-		ImGui::Text("Draw calls: %u (+%u shadow), triangles: %u, culled: %u", stats.DrawCalls, stats.ShadowDrawCalls, stats.Triangles, stats.CulledObjects);
+		ImGui::Text("Draw calls: %u (+%u shadow), triangles: %u, culled: %u, UI elements: %u", stats.DrawCalls, stats.ShadowDrawCalls,
+			stats.Triangles, stats.CulledObjects, stats.UIElements);
 		ImGui::Separator();
 		RenderSettings& settings = m_Context->GetViewportRenderer().GetSettings();
 		ImGui::Checkbox("Shadows", &settings.ShadowsEnabled);

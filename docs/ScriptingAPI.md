@@ -110,9 +110,43 @@ Setting the transform of a dynamic body teleports it; kinematic bodies follow th
 
 Component names and fields are the same as in the editor and the AI interface (`list_component_types`):
 `Transform`, `Camera`, `MeshRenderer`, `DirectionalLight`, `PointLight`, `SpotLight`, `SkyLight`, `RigidBody`,
-`BoxCollider`, `SphereCollider`, `CapsuleCollider`, `Script`, `AudioSource`, `AudioListener`, `Prefab`, `Tag`.
+`BoxCollider`, `SphereCollider`, `CapsuleCollider`, `Script`, `AudioSource`, `AudioListener`, `UIText`, `UIPanel`,
+`Prefab`, `Tag`.
 In tables returned by `GetComponent`, 3-element vectors are `vec3`, 2-element vectors `vec2`, and other arrays
 (e.g. RGBA colors) are Lua arrays (`color[1]` is red).
+
+## Screen-space UI (HUD)
+
+`UIText` and `UIPanel` components draw text and rectangles over the rendered scene (score, timers, health bars,
+messages). They ignore the entity's transform and are updated like any other component:
+
+```lua
+self.entity:SetComponent("UIText", { Text = "Score: " .. self.score })
+Scene.FindEntityByName("HealthBar"):SetComponent("UIPanel", { Size = vec2(200 * health, 20) })
+Scene.FindEntityByName("Message"):SetComponent("UIText", { Text = "You win!", Visible = true })
+```
+
+Layout uses **reference pixels** of a 1280x720 screen: everything is scaled by `viewport height / 720`, so a HUD
+keeps its proportions at any resolution. `(0, 0)` is the top-left corner and +Y points down. An element is placed
+so that its `Pivot` point lands on `Anchor * screen size + Offset`:
+
+| Field | Description |
+|---|---|
+| `Anchor` | `vec2` in 0..1 of the screen: `(0, 0)` top-left, `(0.5, 0.5)` center, `(1, 1)` bottom-right (default center) |
+| `Pivot` | `vec2` in 0..1 of the element: which point of it sits on the anchor (default center) |
+| `Offset` | `vec2` in reference pixels, added to the anchor position |
+| `SortOrder` | Integer; higher draws on top. Ties: creation order, an entity's panel below its own text |
+| `Visible` | Hide without removing |
+| `Color` | `{r, g, b, a}` display (sRGB) color; `a` < 1 is translucent |
+
+`UIText` also has `Text` (UTF-8; `\n` starts a new line; printable ASCII and Latin-1 are supported, other
+characters show as `?`), `FontSize` (reference pixels), `Font` (a `.ttf`/`.otf` asset; empty = built-in Roboto),
+`Alignment` (`"Left"`, `"Center"`, `"Right"` for the lines of multi-line text), `LineSpacing`, `OutlineWidth`
+(reference pixels, up to about a sixth of `FontSize`) and `OutlineColor`.
+`UIPanel` has `Size` (reference pixels) and an optional `Texture` image asset multiplied by `Color`.
+
+Example, a top-left score with an outline: `{ Text = "Score 0", FontSize = 40, Anchor = vec2(0, 0),
+Pivot = vec2(0, 0), Offset = vec2(24, 24), OutlineWidth = 2 }`.
 
 ## Scene
 

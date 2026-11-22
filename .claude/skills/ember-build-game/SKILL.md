@@ -46,6 +46,10 @@ one-off calls. For interactive exploration: `python3 Tools/ember_ai.py launch --
 - Lighting: one `DirectionalLight` (shadows), a `SkyLight` (image-based lighting; optional `EnvironmentMap` .hdr),
   `PointLight`/`SpotLight` for local light, emissive materials for glowing objects.
 - Use `UVTiling` on textured materials for large surfaces. Import external files with `import_file`.
+- HUD (score, timer, messages, health bars): entities with `UIText` / `UIPanel` components, laid out in 1280x720
+  reference pixels with `Anchor`/`Pivot`/`Offset` (see "Screen-space UI" in `docs/ScriptingAPI.md`). Update them
+  from a manager script with `SetComponent("UIText", { Text = ... })`. `capture` returns `stats.ui_elements`, the
+  number of visible UI elements drawn.
 
 ## 3. Write gameplay scripts
 

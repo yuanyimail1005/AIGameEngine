@@ -16,3 +16,6 @@ imgui.ini
 /Screenshots/
 /TestProject/Screenshots/
 /Examples/*/Project/Screenshots/
+
+# Python
+__pycache__/

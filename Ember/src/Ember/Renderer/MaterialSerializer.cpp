@@ -66,11 +66,11 @@ namespace Ember::MaterialSerializer {
 		n["AlphaCutoff"] = m.AlphaCutoff;
 		n["DoubleSided"] = m.DoubleSided;
 		n["UVTiling"] = m.UVTiling;
-		n["BaseColorTexture"] = m.BaseColorTexture;
-		n["MetallicRoughnessTexture"] = m.MetallicRoughnessTexture;
-		n["NormalTexture"] = m.NormalTexture;
-		n["OcclusionTexture"] = m.OcclusionTexture;
-		n["EmissiveTexture"] = m.EmissiveTexture;
+		n["BaseColorTexture"] = MakeStringNode(m.BaseColorTexture);
+		n["MetallicRoughnessTexture"] = MakeStringNode(m.MetallicRoughnessTexture);
+		n["NormalTexture"] = MakeStringNode(m.NormalTexture);
+		n["OcclusionTexture"] = MakeStringNode(m.OcclusionTexture);
+		n["EmissiveTexture"] = MakeStringNode(m.EmissiveTexture);
 		return n;
 	}
 

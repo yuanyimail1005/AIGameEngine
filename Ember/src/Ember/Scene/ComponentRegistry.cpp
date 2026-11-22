@@ -30,6 +30,8 @@ namespace Ember {
 
 		constexpr EnumName<RigidBodyType> s_BodyTypes[] = {
 			{ RigidBodyType::Static, "Static" }, { RigidBodyType::Dynamic, "Dynamic" }, { RigidBodyType::Kinematic, "Kinematic" } };
+		constexpr EnumName<TextAlignment> s_TextAlignments[] = {
+			{ TextAlignment::Left, "Left" }, { TextAlignment::Center, "Center" }, { TextAlignment::Right, "Right" } };
 		constexpr EnumName<SceneCamera::ProjectionType> s_ProjectionTypes[] = {
 			{ SceneCamera::ProjectionType::Perspective, "Perspective" }, { SceneCamera::ProjectionType::Orthographic, "Orthographic" } };
 
@@ -81,7 +83,7 @@ namespace Ember {
 		YAML::Node ToNode(const TagComponent& c)
 		{
 			YAML::Node n;
-			n["Tag"] = c.Tag;
+			n["Tag"] = MakeStringNode(c.Tag);
 			return n;
 		}
 
@@ -196,8 +198,8 @@ namespace Ember {
 		YAML::Node ToNode(const MeshRendererComponent& c)
 		{
 			YAML::Node n;
-			n["Mesh"] = c.Mesh;
-			n["Material"] = c.Material;
+			n["Mesh"] = MakeStringNode(c.Mesh);
+			n["Material"] = MakeStringNode(c.Material);
 			n["OverrideMaterial"] = c.OverrideMaterial;
 			n["MaterialOverride"] = MaterialSerializer::ToYAML(c.MaterialOverride);
 			n["CastShadows"] = c.CastShadows;
@@ -282,7 +284,7 @@ namespace Ember {
 		YAML::Node ToNode(const SkyLightComponent& c)
 		{
 			YAML::Node n;
-			n["EnvironmentMap"] = c.EnvironmentMap;
+			n["EnvironmentMap"] = MakeStringNode(c.EnvironmentMap);
 			n["Intensity"] = c.Intensity;
 			n["Rotation"] = c.Rotation;
 			n["DrawSkybox"] = c.DrawSkybox;
@@ -379,7 +381,7 @@ namespace Ember {
 		YAML::Node ToNode(const ScriptComponent& c)
 		{
 			YAML::Node n;
-			n["Script"] = c.Script;
+			n["Script"] = MakeStringNode(c.Script);
 			return n;
 		}
 
@@ -391,7 +393,7 @@ namespace Ember {
 		YAML::Node ToNode(const AudioSourceComponent& c)
 		{
 			YAML::Node n;
-			n["Clip"] = c.Clip;
+			n["Clip"] = MakeStringNode(c.Clip);
 			n["Volume"] = c.Volume;
 			n["Pitch"] = c.Pitch;
 			n["Loop"] = c.Loop;
@@ -427,10 +429,74 @@ namespace Ember {
 			return Read(n, "Active", c.Active);
 		}
 
+		YAML::Node ToNode(const UITextComponent& c)
+		{
+			YAML::Node n;
+			n["Text"] = MakeStringNode(c.Text);
+			n["Font"] = MakeStringNode(c.Font);
+			n["FontSize"] = c.FontSize;
+			n["Color"] = c.Color;
+			n["Alignment"] = EnumToString(s_TextAlignments, c.Alignment);
+			n["LineSpacing"] = c.LineSpacing;
+			n["OutlineWidth"] = c.OutlineWidth;
+			n["OutlineColor"] = c.OutlineColor;
+			n["Anchor"] = c.Anchor;
+			n["Offset"] = c.Offset;
+			n["Pivot"] = c.Pivot;
+			n["SortOrder"] = c.SortOrder;
+			n["Visible"] = c.Visible;
+			return n;
+		}
+
+		bool FromNode(const YAML::Node& n, UITextComponent& c)
+		{
+			bool ok = Read(n, "Text", c.Text);
+			ok &= Read(n, "Font", c.Font);
+			ok &= Read(n, "FontSize", c.FontSize);
+			ok &= Read(n, "Color", c.Color);
+			ok &= ReadEnum(n, "Alignment", s_TextAlignments, c.Alignment);
+			ok &= Read(n, "LineSpacing", c.LineSpacing);
+			ok &= Read(n, "OutlineWidth", c.OutlineWidth);
+			ok &= Read(n, "OutlineColor", c.OutlineColor);
+			ok &= Read(n, "Anchor", c.Anchor);
+			ok &= Read(n, "Offset", c.Offset);
+			ok &= Read(n, "Pivot", c.Pivot);
+			ok &= Read(n, "SortOrder", c.SortOrder);
+			ok &= Read(n, "Visible", c.Visible);
+			return ok;
+		}
+
+		YAML::Node ToNode(const UIPanelComponent& c)
+		{
+			YAML::Node n;
+			n["Size"] = c.Size;
+			n["Color"] = c.Color;
+			n["Texture"] = MakeStringNode(c.Texture);
+			n["Anchor"] = c.Anchor;
+			n["Offset"] = c.Offset;
+			n["Pivot"] = c.Pivot;
+			n["SortOrder"] = c.SortOrder;
+			n["Visible"] = c.Visible;
+			return n;
+		}
+
+		bool FromNode(const YAML::Node& n, UIPanelComponent& c)
+		{
+			bool ok = Read(n, "Size", c.Size);
+			ok &= Read(n, "Color", c.Color);
+			ok &= Read(n, "Texture", c.Texture);
+			ok &= Read(n, "Anchor", c.Anchor);
+			ok &= Read(n, "Offset", c.Offset);
+			ok &= Read(n, "Pivot", c.Pivot);
+			ok &= Read(n, "SortOrder", c.SortOrder);
+			ok &= Read(n, "Visible", c.Visible);
+			return ok;
+		}
+
 		YAML::Node ToNode(const PrefabComponent& c)
 		{
 			YAML::Node n;
-			n["Prefab"] = c.Prefab;
+			n["Prefab"] = MakeStringNode(c.Prefab);
 			return n;
 		}
 
@@ -495,6 +561,8 @@ namespace Ember {
 			infos.push_back(MakeInfo<ScriptComponent>("Script", "Scripting"));
 			infos.push_back(MakeInfo<AudioSourceComponent>("AudioSource", "Audio"));
 			infos.push_back(MakeInfo<AudioListenerComponent>("AudioListener", "Audio"));
+			infos.push_back(MakeInfo<UITextComponent>("UIText", "UI"));
+			infos.push_back(MakeInfo<UIPanelComponent>("UIPanel", "UI"));
 			infos.push_back(MakeInfo<PrefabComponent>("Prefab", "Core", false));
 			return infos;
 		}

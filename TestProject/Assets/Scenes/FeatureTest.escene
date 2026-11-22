@@ -1,7 +1,7 @@
 Scene: FeatureTest
 Version: 1
 Entities:
-  - Entity: 5015273301646641283
+  - Entity: 14457077551629293494
     Components:
       Tag:
         Tag: Main Camera
@@ -21,7 +21,7 @@ Entities:
         FixedAspectRatio: false
       AudioListener:
         Active: true
-  - Entity: 9123105511969020109
+  - Entity: 3729221477887841613
     Components:
       Tag:
         Tag: Sun
@@ -34,7 +34,7 @@ Entities:
         Intensity: 3.5
         CastShadows: true
         ShadowSoftness: 1
-  - Entity: 8165669854933670340
+  - Entity: 11045839656061017013
     Components:
       Tag:
         Tag: Sky
@@ -47,7 +47,7 @@ Entities:
         Intensity: 1
         Rotation: 0
         DrawSkybox: true
-  - Entity: 13585257038342836645
+  - Entity: 16520966603046436425
     Components:
       Tag:
         Tag: Ground
@@ -81,7 +81,7 @@ Entities:
       BoxCollider:
         HalfExtents: [0.5, 0.5, 0.5]
         Offset: [0, 0, 0]
-  - Entity: 5520048953695706233
+  - Entity: 3198567336482408269
     Components:
       Tag:
         Tag: Ball
@@ -128,7 +128,7 @@ Entities:
         Offset: [0, 0, 0]
       Script:
         Script: Scripts/Ball.lua
-  - Entity: 5450824798885785658
+  - Entity: 8070521981841029190
     Components:
       Tag:
         Tag: Faller
@@ -173,7 +173,7 @@ Entities:
       BoxCollider:
         HalfExtents: [0.5, 0.5, 0.5]
         Offset: [0, 0, 0]
-  - Entity: 1020962543444631777
+  - Entity: 7206813229416971570
     Components:
       Tag:
         Tag: Pusher
@@ -218,7 +218,7 @@ Entities:
       BoxCollider:
         HalfExtents: [0.5, 0.5, 0.5]
         Offset: [0, 0, 0]
-  - Entity: 167549006563455559
+  - Entity: 2267227040321176139
     Components:
       Tag:
         Tag: TriggerZone
@@ -265,7 +265,7 @@ Entities:
         Offset: [0, 0, 0]
       Script:
         Script: Scripts/TriggerZone.lua
-  - Entity: 17584541270961980050
+  - Entity: 344034532400061333
     Components:
       Tag:
         Tag: Crate
@@ -299,7 +299,7 @@ Entities:
       BoxCollider:
         HalfExtents: [0.5, 0.5, 0.5]
         Offset: [0, 0, 0]
-  - Entity: 10852065500884407963
+  - Entity: 2627251810732812050
     Components:
       Tag:
         Tag: GoldStatue
@@ -330,7 +330,7 @@ Entities:
           EmissiveTexture: ""
         CastShadows: true
         Visible: true
-  - Entity: 10591440078910639489
+  - Entity: 12701254437768574457
     Components:
       Tag:
         Tag: Mover
@@ -378,7 +378,7 @@ Entities:
         Offset: [0, 0, 0]
       Script:
         Script: Scripts/Mover.lua
-  - Entity: 205633483423649589
+  - Entity: 17566598972622114707
     Components:
       Tag:
         Tag: Spinner
@@ -411,8 +411,8 @@ Entities:
         Visible: true
       Script:
         Script: Scripts/Spinner.lua
-  - Entity: 15037137746918766641
-    Children: [5913015985524830981]
+  - Entity: 13395362750196164558
+    Children: [13119582320743048044]
     Components:
       Tag:
         Tag: Lamp
@@ -424,8 +424,8 @@ Entities:
         Color: [1, 0.600000024, 0.25]
         Intensity: 6
         Range: 8
-  - Entity: 5913015985524830981
-    Parent: 15037137746918766641
+  - Entity: 13119582320743048044
+    Parent: 13395362750196164558
     Components:
       Tag:
         Tag: LampBulb
@@ -456,7 +456,7 @@ Entities:
           EmissiveTexture: ""
         CastShadows: false
         Visible: true
-  - Entity: 3265690821088946976
+  - Entity: 2454107311200664451
     Components:
       Tag:
         Tag: Spotlight
@@ -470,7 +470,7 @@ Entities:
         Range: 10
         InnerConeAngle: 0.300000012
         OuterConeAngle: 0.5
-  - Entity: 2480881362295987778
+  - Entity: 14288046458730446993
     Components:
       Tag:
         Tag: Speaker
@@ -487,7 +487,85 @@ Entities:
         Spatial: true
         MinDistance: 1
         MaxDistance: 50
-  - Entity: 12078575787773461799
+  - Entity: 3284406823353679439
+    Components:
+      Tag:
+        Tag: HUDPanel
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      UIPanel:
+        Size: [430, 112]
+        Color: [0, 0, 0, 0.449999988]
+        Texture: ""
+        Anchor: [0, 0]
+        Offset: [16, 16]
+        Pivot: [0, 0]
+        SortOrder: 0
+        Visible: true
+  - Entity: 14980825183318596660
+    Components:
+      Tag:
+        Tag: HUDTitle
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      UIText:
+        Text: Ember Feature Test
+        Font: ""
+        FontSize: 40
+        Color: [1, 0.850000024, 0.349999994, 1]
+        Alignment: Left
+        LineSpacing: 1
+        OutlineWidth: 2
+        OutlineColor: [0.150000006, 0.0500000007, 0, 1]
+        Anchor: [0, 0]
+        Offset: [32, 26]
+        Pivot: [0, 0]
+        SortOrder: 1
+        Visible: true
+  - Entity: 2619657281396540316
+    Components:
+      Tag:
+        Tag: HUDStatus
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      UIText:
+        Text: Starting...
+        Font: ""
+        FontSize: 26
+        Color: [0.899999976, 0.949999988, 1, 1]
+        Alignment: Left
+        LineSpacing: 1
+        OutlineWidth: 0
+        OutlineColor: [0, 0, 0, 1]
+        Anchor: [0, 0]
+        Offset: [32, 80]
+        Pivot: [0, 0]
+        SortOrder: 1
+        Visible: true
+  - Entity: 5082027472528333080
+    Components:
+      Tag:
+        Tag: HUDIcon
+      Transform:
+        Translation: [0, 0, 0]
+        Rotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      UIPanel:
+        Size: [64, 64]
+        Color: [1, 1, 1, 1]
+        Texture: Textures/checker.png
+        Anchor: [1, 0]
+        Offset: [-16, 16]
+        Pivot: [1, 0]
+        SortOrder: 0
+        Visible: true
+  - Entity: 17088490673874636755
     Components:
       Tag:
         Tag: TestController

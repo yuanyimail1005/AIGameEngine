@@ -113,10 +113,33 @@ function Game:OnCreate()
 	Log.Info("Collect " .. self.total .. " orbs in " .. self.timeLimit .. " seconds!")
 end
 
+-- HUD: score and countdown in the screen-space UI, plus a centered message when the game ends.
+function Game:UpdateHUD()
+	local score = Scene.FindEntityByName("ScoreText")
+	if score then
+		score:SetComponent("UIText", { Text = "Orbs " .. self.collected .. " / " .. self.total })
+	end
+	local timer = Scene.FindEntityByName("TimerText")
+	if timer then
+		local remaining = math.max(0, self.timeLimit - Scene.GetTime())
+		local color = remaining < 10 and { 1, 0.35, 0.3, 1 } or { 1, 1, 1, 1 }
+		timer:SetComponent("UIText", { Text = string.format("Time %d", math.ceil(remaining)), Color = color })
+	end
+end
+
+function Game:ShowMessage(text, color)
+	local message = Scene.FindEntityByName("MessageText")
+	if message then
+		message:SetComponent("UIText", { Text = text, Color = color, Visible = true })
+	end
+end
+
 function Game:OnUpdate(dt)
+	self:UpdateHUD()
 	if self.state ~= "playing" then return end
 	if Scene.GetTime() > self.timeLimit then
 		self.state = "lost"
+		self:ShowMessage("Time's up!", { 1, 0.4, 0.3, 1 })
 		Log.Warn("Time is up! Orbs collected: " .. self.collected .. "/" .. self.total)
 	end
 end
@@ -131,6 +154,7 @@ function Game:OnOrbCollected()
 	Log.Info("Orb " .. self.collected .. "/" .. self.total)
 	if self.collected >= self.total then
 		self.state = "won"
+		self:ShowMessage(string.format("You win!\n%.1f seconds", Scene.GetTime()), { 0.4, 1, 0.5, 1 })
 		Audio.PlayOneShot("Audio/win.wav", 1.0)
 		Log.Info("You win! Time: " .. string.format("%.1f", Scene.GetTime()) .. "s, falls: " .. self.falls)
 	end
@@ -245,6 +269,19 @@ def main():
         editor.call("create_prefab", entity=orb["id"], path="Prefabs/Orb.eprefab")
         editor.call("destroy_entity", entity=orb["id"])
 
+        # HUD (screen-space UI, 1280x720 reference pixels): score and countdown on a translucent bar, a help line,
+        # and a hidden centered message the GameManager shows when the game ends.
+        create("HUDBar", UIPanel={"Size": [1280, 72], "Color": [0.02, 0.03, 0.06, 0.55], "Anchor": [0.5, 0], "Pivot": [0.5, 0]})
+        outline = {"OutlineWidth": 2, "OutlineColor": [0, 0, 0, 0.9]}
+        create("ScoreText", UIText={"Text": "Orbs 0 / 8", "FontSize": 40, "Color": [0.45, 1.0, 0.6, 1.0], "Anchor": [0, 0],
+                                    "Pivot": [0, 0.5], "Offset": [32, 36], "SortOrder": 1, **outline})
+        create("TimerText", UIText={"Text": "Time 90", "FontSize": 40, "Anchor": [1, 0], "Pivot": [1, 0.5],
+                                    "Offset": [-32, 36], "SortOrder": 1, **outline})
+        create("HelpText", UIText={"Text": "WASD / arrow keys to roll - avoid the red sweeper", "FontSize": 24,
+                                   "Color": [1, 1, 1, 0.8], "Anchor": [0.5, 1], "Pivot": [0.5, 1], "Offset": [0, -20], **outline})
+        create("MessageText", UIText={"Text": "", "FontSize": 96, "Alignment": "Center", "Visible": False, "SortOrder": 2,
+                                      "OutlineWidth": 4, "OutlineColor": [0, 0, 0, 1]})
+
         create("GameManager", Script={"Script": "Scripts/GameManager.lua"})
         editor.call("save_scene")
 
@@ -270,6 +307,9 @@ def main():
         assert collected == before + 2, f"expected {before + 2} orbs collected, got {collected}"
         lit = editor.call("get_component", entity=f"Marker{collected}", component="MeshRenderer")
         assert lit["MaterialOverride"]["EmissiveStrength"] == 3, "scoreboard marker should light up"
+        editor.call("run_frames", frames=1)
+        score = editor.call("get_component", entity="ScoreText", component="UIText")["Text"]
+        assert score == f"Orbs {collected} / 8", f"HUD score should read 'Orbs {collected} / 8', got '{score}'"
 
         # Falling off respawns the player and counts a fall.
         editor.call("execute_lua", code="Scene.FindEntityByName('Player'):SetPosition(vec3(30, -20, 0))")
@@ -279,6 +319,13 @@ def main():
         state = editor.call("get_play_state")
         assert not state["script_errors"], state["script_errors"]
         shot = editor.call("capture", path=os.path.abspath(args.screenshot), width=1280, height=720)
+        assert shot["stats"]["ui_elements"] == 4, f"expected 4 visible HUD elements, got {shot['stats']['ui_elements']}"
+
+        # Winning shows the centered message.
+        editor.call("execute_lua", code=f"local g = {game}; for i = g.collected + 1, g.total do g:OnOrbCollected() end")
+        editor.call("run_frames", frames=1)
+        message = editor.call("get_component", entity="MessageText", component="UIText")
+        assert message["Visible"] and message["Text"].startswith("You win!"), message
         editor.call("stop")
         print("Play-test passed: player moves, orbs are collected, falls respawn. Screenshot:", shot["path"])
 

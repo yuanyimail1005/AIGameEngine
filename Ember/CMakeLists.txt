@@ -51,3 +51,8 @@ if(EMBER_SHADER_SOURCES)
 		OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/shaders"
 		SHADERS ${EMBER_SHADER_SOURCES})
 endif()
+
+# Default UI font: Roboto Medium (Apache License 2.0), taken from the pinned Dear ImGui sources.
+ember_embed_resources(Ember
+	OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/resources"
+	RESOURCES DefaultFont "${imgui_SOURCE_DIR}/misc/fonts/Roboto-Medium.ttf")

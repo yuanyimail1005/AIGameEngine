@@ -33,6 +33,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(EmberCompileOptions)
 include(EmberDependencies)
 include(EmberShaders)
+include(EmberResources)
 
 if(EMBER_BUILD_TESTS)
 	enable_testing()

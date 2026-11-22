@@ -49,6 +49,29 @@ namespace {
 		sky.AddComponent<SkyLightComponent>().EnvironmentMap = "HDRI/studio.hdr";
 		sky.AddComponent<SpotLightComponent>();
 		sky.AddComponent<AudioListenerComponent>();
+
+		Entity hud = scene->CreateEntity("HUD");
+		auto& panel = hud.AddComponent<UIPanelComponent>();
+		panel.Size = { 300.0f, 60.0f };
+		panel.Color = { 0.0f, 0.0f, 0.0f, 0.5f };
+		panel.Texture = "Textures/Frame.png";
+		panel.Anchor = { 0.0f, 1.0f };
+		panel.Pivot = { 0.0f, 1.0f };
+		panel.SortOrder = -2;
+		auto& label = hud.AddComponent<UITextComponent>();
+		label.Text = "Score: 100\nLives: 3";
+		label.Font = "Fonts/Title.ttf";
+		label.FontSize = 40.0f;
+		label.Color = { 1.0f, 0.8f, 0.2f, 1.0f };
+		label.Alignment = TextAlignment::Right;
+		label.LineSpacing = 1.25f;
+		label.OutlineWidth = 2.0f;
+		label.OutlineColor = { 0.1f, 0.0f, 0.0f, 0.75f };
+		label.Anchor = { 1.0f, 0.0f };
+		label.Offset = { -20.0f, 20.0f };
+		label.Pivot = { 1.0f, 0.0f };
+		label.SortOrder = 3;
+		label.Visible = false;
 		return scene;
 	}
 

@@ -77,6 +77,8 @@ namespace Ember {
 		// camera instead of the editor camera.
 		bool CaptureToFile(const std::filesystem::path& path, uint32_t width, uint32_t height, bool useGameCamera, std::string* outError = nullptr);
 		std::optional<Image> Capture(uint32_t width, uint32_t height, bool useGameCamera, std::string* outError = nullptr);
+		// Statistics of the last capture (zeroes before the first capture).
+		RenderStats GetCaptureStats() const;
 		// Entity at a pixel of the last capture (or of the viewport render).
 		UUID PickEntity(uint32_t x, uint32_t y, bool fromViewport);
 
